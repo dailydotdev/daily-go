@@ -5,9 +5,31 @@
 </template>
 
 <style>
-html
-{
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+@import '../styles/dejavue.pcss';
+@import '../styles/layout.pcss';
+@import '../styles/typography.pcss';
+
+html {
+  --color-background: #272727;
+  --color-background-highlight: #393C3E;
+  --color-light-shadow: #525252;
+  --color-dark-shadow: #272727;
+  --color-tile-border: #272727;
+  --color-comment: #848886;
+  --color-primary: #BFBEBE;
+  --color-secondary: #66696C;
+  --color-highlight: #4D96F1;
+  --color-special1: #FDC769;
+  --color-special2: #9DCB74;
+  --color-special3: #D77E2B;
+  --color-special4: #698C5A;
+  --color-github: white;
+  --color-github-invert: black;
+  --shadow-offset: 8px;
+}
+
+html {
+  font-family: 'DejaVuSansMono', monospace;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -15,39 +37,55 @@ html
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  background: var(--color-background);
 }
-*, *:before, *:after
-{
+
+*, *:before, *:after {
   box-sizing: border-box;
   margin: 0;
 }
-.button--green
-{
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-moz-focus-inner {
+    border: none;
+  }
 }
-.button--green:hover
-{
-  color: #fff;
-  background-color: #3b8070;
+
+.flex {
+  flex: 1;
 }
-.button--grey
-{
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
 }
-.button--grey:hover
-{
-  color: #fff;
-  background-color: #35495e;
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.special3 {
+  color: var(--color-special3);
+}
+
+.special4 {
+  color: var(--color-special4);
 }
 </style>

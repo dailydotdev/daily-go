@@ -29,6 +29,13 @@ module.exports = {
   css: [],
 
   /*
+  ** Router config
+  */
+  router: {
+    middleware: 'load-state',
+  },
+
+  /*
   ** Plugins to load before mounting the App
   */
   plugins: [],
@@ -39,6 +46,14 @@ module.exports = {
   modules: [
     '@nuxtjs/pwa',
   ],
+
+  env: {
+    GA: process.env.GA,
+    MIXPANEL: process.env.MIXPANEL,
+    API_URL: process.env.API_URL,
+    BRANCH: process.env.BRANCH,
+    VERSION: process.env.VERSION,
+  },
 
   /*
   ** Build configuration

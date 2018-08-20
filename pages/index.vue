@@ -1,58 +1,63 @@
 <template>
-  <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        daily-app
-      </h1>
-      <h2 class="subtitle">
-        My striking Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
-        <a href="https://github.com/nuxt/nuxt.js" target="_blank" class="button--grey">GitHub</a>
-      </div>
+  <section class="container sign-in vertical align-center">
+    <div class="placeholder-for-image flex"></div>
+    <h2 class="jumbo special3">Sign in to Daily to get full sync with your bookmarks</h2>
+    <div class="popup">
+      <a :href="loginGithub" class="jumbo special2">Login GitHub</a>
+      <a :href="loginGoogle" class="jumbo special1">Login Google</a>
     </div>
   </section>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue';
+import { getLoginLink } from '../services/login';
 
 export default {
-  components: {
-    Logo
-  }
+  components: {},
+
+  middleware: 'anonymous',
+
+  data() {
+    return {
+      loginGithub: getLoginLink('github'),
+      loginGoogle: getLoginLink('google'),
+    };
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  height: 100vh;
+  padding: 80px 24px 0;
+
+  &.sign-in {
+    padding-bottom: 387px;
+  }
+}
+
+.placeholder-for-image {
+  width: 190px;
+  background: red;
+}
+
+h2 {
+  margin: 40px;
   text-align: center;
 }
 
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
+.popup {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 387px;
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-around;
 }
 </style>
