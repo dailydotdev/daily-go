@@ -1,91 +1,15 @@
 <template>
   <div>
     <nuxt/>
+    <DaFooter/>
   </div>
 </template>
+<script>
+import DaFooter from '../components/DaFooter';
 
-<style>
-@import '../styles/dejavue.pcss';
-@import '../styles/layout.pcss';
-@import '../styles/typography.pcss';
-
-html {
-  --color-background: #272727;
-  --color-background-highlight: #393C3E;
-  --color-light-shadow: #525252;
-  --color-dark-shadow: #272727;
-  --color-tile-border: #272727;
-  --color-comment: #848886;
-  --color-primary: #BFBEBE;
-  --color-secondary: #66696C;
-  --color-highlight: #4D96F1;
-  --color-special1: #FDC769;
-  --color-special2: #9DCB74;
-  --color-special3: #D77E2B;
-  --color-special4: #698C5A;
-  --color-github: white;
-  --color-github-invert: black;
-  --shadow-offset: 8px;
-}
-
-html {
-  font-family: 'DejaVuSansMono', monospace;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-  background: var(--color-background);
-}
-
-*, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-button {
-  cursor: pointer;
-  background: none;
-  border: none;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::-moz-focus-inner {
-    border: none;
-  }
-}
-
-.flex {
-  flex: 1;
-}
-
-.horizontal {
-  display: flex;
-  flex-direction: row;
-}
-
-.vertical {
-  display: flex;
-  flex-direction: column;
-}
-
-.align-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.special3 {
-  color: var(--color-special3);
-}
-
-.special4 {
-  color: var(--color-special4);
-}
-</style>
+export default {
+  components: {
+    DaFooter,
+  },
+};
+</script>

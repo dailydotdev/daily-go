@@ -26,7 +26,9 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  css: [
+    '~assets/global.css',
+  ],
 
   /*
   ** Router config
@@ -38,7 +40,10 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: [
+    '~/plugins/external.js',
+    '~/plugins/filters.js',
+  ],
 
   /*
   ** Nuxt.js modules
@@ -52,7 +57,7 @@ module.exports = {
     MIXPANEL: process.env.MIXPANEL,
     API_URL: process.env.API_URL,
     BRANCH: process.env.BRANCH,
-    VERSION: process.env.VERSION,
+    VERSION: pkg.version,
   },
 
   /*
@@ -72,6 +77,13 @@ module.exports = {
           exclude: /(node_modules)/
         });
       }
+
+      config.module.rules.push({
+        test: /\.css$/,
+        use: [
+          { loader: 'postcss-loader', options: {} }
+        ]
+      });
     }
   }
 };

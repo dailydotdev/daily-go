@@ -1,12 +1,14 @@
-import { refreshToken } from '../services/api';
+import { refreshToken, logout } from '../services/api';
 
 export const state = () => ({ profile: null });
 
 export const mutations = {
   updateProfile(state, profile) {
     const newProfile = Object.assign({}, profile);
-    // TODO: need to set something temporary when this is a new user
-    delete newProfile.newUser;
+    if (newProfile.newUser) {
+      // TODO: need to set something temporary when this is a new user
+      delete newProfile.newUser;
+    }
 
     state.profile = newProfile;
   },
@@ -22,11 +24,15 @@ export const actions = {
       .then((accessToken) =>
         commit('refreshToken', { accessToken: accessToken.token, expiresIn: accessToken.expiresIn }));
   },
+  logout({ state, commit }) {
+    commit('updateProfile', {});
+    return logout();
+  }
 };
 
 export const getters = {
   isLoggedIn(state) {
-    return !!state.profile;
+    return !!state.profile && !!state.profile.id;
   },
 
   isTokenAboutToExpire(state) {

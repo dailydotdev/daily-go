@@ -10,3 +10,13 @@ export const refreshToken = token =>
     credentials: 'include',
   })
     .then(response => response.json());
+
+export const fetchPublications = () =>
+  fetch(`${apiUrl}/v1/publications`, { credentials: 'include' })
+    .then(response => response.json());
+
+export const logout = () =>
+  fetch(`${apiUrl}/v1/users/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });

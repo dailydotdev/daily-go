@@ -14,5 +14,8 @@ dist
 .idea
 
 sw.*
+
 local.sh
 prod.sh
+
+icons/

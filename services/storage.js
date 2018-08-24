@@ -5,7 +5,7 @@ const store = localForage.createInstance({
 });
 
 export const cacheState = state => {
-  const keys = ['user'];
+  const keys = ['user', 'feed'];
   const cachedState = Object.keys(state)
     .filter(key => keys.indexOf(key) > -1)
     .reduce((res, cur) => Object.assign({}, res, { [cur]: state[cur] }), {});

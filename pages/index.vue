@@ -1,10 +1,10 @@
 <template>
   <section class="container sign-in vertical align-center">
     <div class="placeholder-for-image flex"></div>
-    <h2 class="jumbo special3">Sign in to Daily to get full sync with your bookmarks</h2>
+    <h2 class="title special3">Sign in to Daily to get full sync with your bookmarks</h2>
     <div class="popup">
-      <a :href="loginGithub" class="jumbo special2">Login GitHub</a>
-      <a :href="loginGoogle" class="jumbo special1">Login Google</a>
+      <a :href="loginGithub" class="title special2">Login GitHub</a>
+      <a :href="loginGoogle" class="title special1">Login Google</a>
     </div>
   </section>
 </template>
@@ -16,6 +16,7 @@ export default {
   components: {},
 
   middleware: 'anonymous',
+  layout: 'empty',
 
   data() {
     return {
