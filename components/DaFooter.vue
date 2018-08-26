@@ -1,65 +1,68 @@
 <template>
   <div>
-    <footer v-if="!opened">
-      <button class="profile-img btn-icon" v-if="isLoggedIn" @click="opened = true">
-        <img :src="profileImage" alt="Profile image"/>
-      </button>
-      <!--<DaSwitch icon="bookmark" :checked="true" @toggle="onToggleBookmark"></DaSwitch>-->
-    </footer>
-    <div class="dialog-backdrop" v-else>
-      <div tabindex="0"></div>
-      <div class="dialog" role="dialog" aria-modal="true">
-        <section class="profile-section">
-          <div class="header">
-            <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
-            <img class="profile-img" :src="profileImage" alt="Profile image"/>
-            <button classs="btn-icon" @click="close()">
-              <svgicon name="x"></svgicon>
-            </button>
-          </div>
-          <div class="name jumbo">{{name}}</div>
-          <div class="provider text comment">
-            <svgicon :name="provider"></svgicon>
-            <span>via {{provider | provider}}</span>
-          </div>
-          <div class="pubs">
-            <img v-for="pub in publications" :key="pub.id" :src="pub.image" :alt="pub.name"/>
-          </div>
-          <div class="text">Customize your feed with:</div>
-          <div class="stores">
-            <a class="caption"
-               href="https://chrome.google.com/webstore/detail/daily-discover-web-techno/jlmpjdjjbgclbocgajdjefcidcncaied"
-               target="_blank">
-              <img src="~/assets/chrome.svg"/>
-              Chrome
-            </a>
-            <a class="caption"
-               href="https://addons.mozilla.org/en-US/firefox/addon/daily/"
-               target="_blank">
-              <img src="~/assets/firefox.svg"/>
-              Firefox
-            </a>
-          </div>
-        </section>
-        <section class="settings-section">
-          <div class="text heading comment">/# Settings #/</div>
-          <DaSwitch :icon="themeIcon" :checked="theme" @toggle="onToggleTheme" label="Theme"></DaSwitch>
-          <a target="_blank" class="caption" href="https://www.iubenda.com/privacy-policy/14695236">Privacy Policy</a>
-          <a target="_blank" class="caption" href="https://www.iubenda.com/privacy-policy/14695236/cookie-policy">Cookie
-            Policy</a>
-          <a target="_blank" class="caption" href="https://medium.com/daily-now/daily-terms-of-service-47bb9c9a4b99">Terms
-            of Service</a>
-          <button class="caption" @click="onLogout">Log out</button>
-          <div class="caption comment">// Version {{version}}</div>
-        </section>
+    <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave" :css="false">
+      <footer v-if="!opened" ref="footer">
+        <button class="profile-img btn-icon" v-if="isLoggedIn" @click="opened = true" ref="footerProfile">
+          <img :src="profileImage" alt="Profile image"/>
+        </button>
+        <!--<DaSwitch icon="bookmark" :checked="true" @toggle="onToggleBookmark"></DaSwitch>-->
+      </footer>
+      <div class="dialog-container" ref="dialogContainer" v-else>
+        <div tabindex="0"></div>
+        <div class="dialog" role="dialog" ref="dialog" aria-modal="true">
+          <img class="profile-img" :src="profileImage" alt="Profile image" ref="dialogProfile"/>
+          <section class="profile-section">
+            <div class="header">
+              <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
+              <button classs="btn-icon" @click="close()">
+                <svgicon name="x"></svgicon>
+              </button>
+            </div>
+            <div class="name jumbo">{{name}}</div>
+            <div class="provider text comment">
+              <svgicon :name="provider"></svgicon>
+              <span>via {{provider | provider}}</span>
+            </div>
+            <div class="pubs">
+              <img v-for="pub in publications" :key="pub.id" :src="pub.image" :alt="pub.name"/>
+            </div>
+            <div class="text">Customize your feed with:</div>
+            <div class="stores">
+              <a class="caption"
+                 href="https://chrome.google.com/webstore/detail/daily-discover-web-techno/jlmpjdjjbgclbocgajdjefcidcncaied"
+                 target="_blank">
+                <img src="~/assets/chrome.svg"/>
+                Chrome
+              </a>
+              <a class="caption"
+                 href="https://addons.mozilla.org/en-US/firefox/addon/daily/"
+                 target="_blank">
+                <img src="~/assets/firefox.svg"/>
+                Firefox
+              </a>
+            </div>
+          </section>
+          <section class="settings-section">
+            <div class="text heading comment">/# Settings #/</div>
+            <DaSwitch :icon="themeIcon" :checked="theme" @toggle="onToggleTheme" label="Theme"></DaSwitch>
+            <a target="_blank" class="caption" href="https://www.iubenda.com/privacy-policy/14695236">Privacy Policy</a>
+            <a target="_blank" class="caption" href="https://www.iubenda.com/privacy-policy/14695236/cookie-policy">Cookie
+              Policy</a>
+            <a target="_blank" class="caption" href="https://medium.com/daily-now/daily-terms-of-service-47bb9c9a4b99">Terms
+              of Service</a>
+            <button class="caption" @click="onLogout">Log out</button>
+            <div class="caption comment">// Version {{version}}</div>
+          </section>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { version } from '../services/config';
+import { FLIP, FLP } from '../services/flip';
 
 export default {
   name: 'DaFooter',
@@ -126,6 +129,61 @@ export default {
     //
     // },
 
+    beforeEnter() {
+      if (this.opened) {
+        this.$refs.dialog.classList.add('before-enter');
+
+        this.dialogAnim = new FLIP(this.$refs.dialog, false, true, false, false);
+        this.profileAnim = new FLIP(this.$refs.dialogProfile, true, false, false);
+        this.dialogAnim.first(this.$refs.footer);
+        this.profileAnim.first(this.$refs.footerProfile);
+      } else {
+        this.$refs.dialog.classList.add('before-leave');
+
+        this.dialogAnim = new FLP(this.$refs.dialog, false, true, false, false);
+        this.profileAnim = new FLP(this.$refs.dialogProfile, true, false, false);
+        this.dialogAnim.first();
+        this.profileAnim.first();
+      }
+    },
+
+    enter(_, done) {
+      if (this.opened) {
+        setTimeout(() => {
+          this.$refs.dialog.classList.add('enter');
+          setTimeout(() => {
+            this.dialogAnim.play().then(done);
+            this.profileAnim.play();
+          });
+        });
+      } else {
+        done();
+      }
+    },
+
+    afterEnter() {
+      if (this.opened) {
+        this.$refs.dialog.classList.remove('enter');
+        this.$refs.dialog.classList.remove('before-enter');
+      }
+    },
+
+    leave(_, done) {
+      if (this.opened) {
+        this.dialogAnim.last();
+        this.profileAnim.last();
+        this.profileAnim.invert();
+        this.dialogAnim.invert();
+        done();
+      } else {
+        this.$refs.dialog.classList.add('leave');
+        this.dialogAnim.last(this.$refs.footer);
+        this.profileAnim.last(this.$refs.footerProfile);
+        this.dialogAnim.play().then(done);
+        this.profileAnim.play();
+      }
+    },
+
     ...mapActions({
       logout: 'user/logout',
     }),
@@ -186,13 +244,14 @@ button {
   }
 }
 
-.dialog-backdrop {
+.dialog-container {
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
   overflow: hidden;
+  z-index: 100;
 
   &:before {
     content: ' ';
@@ -211,9 +270,42 @@ button {
   left: 0;
   bottom: 0;
   width: 100%;
+  height: 635px;
   background: var(--color-background-highlight);
   border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
+
+  &.before-enter section {
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  &.before-leave {
+    will-change: opacity, transform;
+
+    & section {
+      opacity: 1;
+      will-change: opacity;
+    }
+  }
+
+  &.enter, &.leave {
+    transition: transform 0.6s ease-out;
+
+    & section {
+      opacity: 1;
+      transition: opacity 0.3s linear 0.3s;
+    }
+
+    & .profile-img {
+      transition: transform 0.6s ease-out;
+    }
+  }
+
+  &.leave section {
+    opacity: 0;
+    transition-delay: 0s;
+  }
 
   & section {
     display: flex;
@@ -223,18 +315,31 @@ button {
     & > * {
       margin: var(--size-space) 0;
     }
+
+    & > :first-child {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  & .profile-img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--size-space) * 3);
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border-radius: var(--size-space);
   }
 
   & .profile-section {
     align-items: center;
     padding-bottom: calc(var(--size-space) * 3);
     border-bottom: 1px solid var(--color-tile-border);
-
-    & .profile-img {
-      width: 60px;
-      height: 60px;
-      border-radius: var(--size-space);
-    }
 
     & .name {
       margin-bottom: 0;
@@ -259,24 +364,17 @@ button {
       position: relative;
       align-self: stretch;
       height: 60px;
-      margin-top: 0;
 
       & > * {
         position: absolute;
         top: 0;
       }
 
-      & > :nth-child(1) {
+      & > :first-child {
         left: 0;
       }
 
-      & > :nth-child(2) {
-        left: 0;
-        right: 0;
-        margin: auto;
-      }
-
-      & > :nth-child(3) {
+      & > :last-child {
         right: 0;
       }
     }
@@ -350,7 +448,6 @@ button {
     }
 
     & .heading {
-      margin-top: 0;
       font-style: italic;
     }
 
