@@ -51,7 +51,6 @@
             <a target="_blank" class="caption" href="https://medium.com/daily-now/daily-terms-of-service-47bb9c9a4b99">Terms
               of Service</a>
             <button class="caption" @click="onLogout">Log out</button>
-            <div class="caption comment">// Version {{version}}</div>
           </section>
         </div>
       </div>
@@ -61,7 +60,6 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
-import { version } from '../services/config';
 import { FLIP, FLP } from '../services/flip';
 
 export default {
@@ -74,7 +72,6 @@ export default {
     return {
       opened: false,
       theme: false,
-      version,
     };
   },
 
@@ -270,7 +267,8 @@ button {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 635px;
+  max-height: 100vh;
+  overflow: auto;
   background: var(--color-background-highlight);
   border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
@@ -386,12 +384,13 @@ button {
 
     & .pubs {
       display: flex;
+      height: 30px;
       flex-direction: row;
       margin-top: calc(var(--size-space) * 3);
 
       & > * {
         width: 30px;
-        height: 30px;
+        height: 100%;
         margin: 0 8px;
         border-radius: calc(var(--size-space) / 2);
       }
