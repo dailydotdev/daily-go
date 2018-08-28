@@ -269,9 +269,6 @@ button {
   width: 100%;
   max-height: 100vh;
   overflow: auto;
-  background: var(--color-background-highlight);
-  border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
-  box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
 
   &.before-enter section {
     opacity: 0;

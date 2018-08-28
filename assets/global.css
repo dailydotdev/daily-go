@@ -114,3 +114,9 @@ button {
   --da-switch-height: 28px;
   --da-switch-slider-height: 18px;
 }
+
+.dialog {
+  background: var(--color-background-highlight);
+  border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
+  box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
+}
