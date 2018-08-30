@@ -84,6 +84,10 @@ button {
   justify-content: center;
 }
 
+.primary {
+  color: var(--color-primary);
+}
+
 .comment {
   color: var(--color-comment);
 }
@@ -119,4 +123,20 @@ button {
   background: var(--color-background-highlight);
   border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
+}
+
+.bookmark-illu {
+  position: relative;
+  width: 100%;
+  max-height: 190px;
+
+  & img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    margin: auto;
+  }
 }

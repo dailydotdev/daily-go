@@ -27,20 +27,7 @@
               <img v-for="pub in publications" :key="pub.id" :src="pub.image" :alt="pub.name"/>
             </div>
             <div class="text">Customize your feed with:</div>
-            <div class="stores">
-              <a class="caption"
-                 href="https://chrome.google.com/webstore/detail/daily-discover-web-techno/jlmpjdjjbgclbocgajdjefcidcncaied"
-                 target="_blank">
-                <img src="~/assets/chrome.svg"/>
-                Chrome
-              </a>
-              <a class="caption"
-                 href="https://addons.mozilla.org/en-US/firefox/addon/daily/"
-                 target="_blank">
-                <img src="~/assets/firefox.svg"/>
-                Firefox
-              </a>
-            </div>
+            <DaStores></DaStores>
           </section>
           <section class="settings-section">
             <div class="text heading comment">/# Settings #/</div>
@@ -61,11 +48,13 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { FLIP, FLP } from '../services/flip';
+import DaStores from './DaStores';
 
 export default {
   name: 'DaFooter',
   components: {
     DaSwitch: () => import('./DaSwitch'),
+    DaStores,
   },
 
   data() {
@@ -126,16 +115,16 @@ export default {
     //
     // },
 
-    beforeEnter() {
+    beforeEnter(elem) {
       if (this.opened) {
-        this.$refs.dialog.classList.add('before-enter');
+        elem.classList.add('before-enter');
 
         this.dialogAnim = new FLIP(this.$refs.dialog, false, true, false, false);
         this.profileAnim = new FLIP(this.$refs.dialogProfile, true, false, false);
         this.dialogAnim.first(this.$refs.footer);
         this.profileAnim.first(this.$refs.footerProfile);
       } else {
-        this.$refs.dialog.classList.add('before-leave');
+        this.$refs.dialogContainer.classList.add('before-leave');
 
         this.dialogAnim = new FLP(this.$refs.dialog, false, true, false, false);
         this.profileAnim = new FLP(this.$refs.dialogProfile, true, false, false);
@@ -147,7 +136,7 @@ export default {
     enter(_, done) {
       if (this.opened) {
         setTimeout(() => {
-          this.$refs.dialog.classList.add('enter');
+          this.$refs.dialogContainer.classList.add('enter');
           setTimeout(() => {
             this.dialogAnim.play().then(done);
             this.profileAnim.play();
@@ -160,8 +149,8 @@ export default {
 
     afterEnter() {
       if (this.opened) {
-        this.$refs.dialog.classList.remove('enter');
-        this.$refs.dialog.classList.remove('before-enter');
+        this.$refs.dialogContainer.classList.remove('enter');
+        this.$refs.dialogContainer.classList.remove('before-enter');
       }
     },
 
@@ -173,7 +162,7 @@ export default {
         this.dialogAnim.invert();
         done();
       } else {
-        this.$refs.dialog.classList.add('leave');
+        this.$refs.dialogContainer.classList.add('leave');
         this.dialogAnim.last(this.$refs.footer);
         this.profileAnim.last(this.$refs.footerProfile);
         this.dialogAnim.play().then(done);
@@ -204,7 +193,7 @@ footer {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 75px;
+  height: var(--size-footer);
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -260,31 +249,45 @@ button {
     background: var(--color-background);
     opacity: 0.52;
   }
-}
 
-.dialog {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  max-height: 100vh;
-  overflow: auto;
+  &.before-enter {
+    &:before {
+      will-change: opacity;
+      opacity: 0;
+    }
 
-  &.before-enter section {
-    opacity: 0;
-    will-change: opacity;
-  }
-
-  &.before-leave {
-    will-change: opacity, transform;
-
-    & section {
-      opacity: 1;
+    & .dialog section {
+      opacity: 0;
       will-change: opacity;
     }
   }
 
-  &.enter, &.leave {
+  &.before-leave {
+    &:before {
+      will-change: opacity;
+    }
+
+    & .dialog {
+      will-change: opacity, transform;
+
+      & section {
+        opacity: 1;
+        will-change: opacity;
+      }
+    }
+  }
+
+  &.enter:before {
+    transition: opacity 0.6s linear;
+    opacity: 0.52;
+  }
+
+  &.leave:before {
+    transition: opacity 0.6s linear;
+    opacity: 0;
+  }
+
+  &.enter .dialog, &.leave .dialog {
     transition: transform 0.6s ease-out;
 
     & section {
@@ -297,10 +300,19 @@ button {
     }
   }
 
-  &.leave section {
+  &.leave .dialog section {
     opacity: 0;
     transition-delay: 0s;
   }
+}
+
+.dialog {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  max-height: 100vh;
+  overflow: auto;
 
   & section {
     display: flex;
@@ -407,32 +419,6 @@ button {
 
     & .text {
       color: var(--color-primary);
-    }
-
-    & .stores {
-      display: flex;
-      flex-direction: row;
-
-      & a {
-        display: flex;
-        width: 110px;
-        height: 40px;
-        margin: 0 var(--size-space);
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        border-radius: var(--size-space);
-        background: var(--color-github);
-        color: var(--color-github-invert);
-        font-weight: bold;
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
-
-        & img {
-          width: auto;
-          height: 20px;
-          margin-right: 10px;
-        }
-      }
     }
   }
 

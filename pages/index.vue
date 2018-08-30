@@ -1,9 +1,9 @@
 <template>
   <section class="container vertical align-center">
-    <div class="illu flex">
+    <div class="bookmark-illu flex">
       <img src="~/assets/bookmark_illu.svg"/>
     </div>
-    <h2 class="subtext special3">Sign in to Daily to get full sync with your bookmarks</h2>
+    <h2 class="res-subtext special3">Sign in to Daily to get full sync with your bookmarks</h2>
     <div class="login dialog">
       <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
       <svgicon class="user" name="user"></svgicon>
@@ -57,21 +57,8 @@ export default {
   height: 100vh;
 }
 
-.illu {
-  position: relative;
-  width: 100%;
+.bookmark-illu {
   margin: calc(var(--size-space) * 3) 0 calc(var(--size-space) / 2);
-
-  & img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    max-height: 190px;
-    margin: auto;
-  }
 }
 
 h2 {
@@ -186,19 +173,13 @@ h2 {
   .illu {
     margin-top: 55px;
     margin-bottom: 0;
-
-    @media (min-height: 700px) {
-      height: 190px;
-      flex: none;
-    }
+    flex: 2;
   }
 
   h2 {
     display: flex;
     margin: 0 calc(var(--size-space) * 3);
     align-items: center;
-    font-size: 18px;
-    line-height: 24px;
     flex: 1;
   }
 
