@@ -8,7 +8,7 @@ const store = localForage.createInstance({
 const truncToOnePage = posts => posts ? posts.slice(0, pageSize) : posts;
 
 export const cacheState = state => {
-  const keys = ['user', 'feed'];
+  const keys = ['user', 'feed', 'ui'];
   const opt = {
     user: {
       filter: [],
@@ -19,6 +19,10 @@ export const cacheState = state => {
       transform: {
         bookmarks: truncToOnePage,
       }
+    },
+    ui: {
+      filter: [],
+      transform: {},
     },
   };
   const cachedState = Object.keys(state)

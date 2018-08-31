@@ -23,6 +23,12 @@
                       :title="item.title" :source="item.publication.name"
                       :logo="item.publication.image" :bookmarked="item.bookmarked"></DaInsanePost>
       </div>
+      <div class="cards" v-else>
+        <DaPost v-for="item in posts" :key="item.id" :post-id="item.id" :link="item.url"
+                :img="item.image" :title="item.title" :source="item.publication.name"
+                :logo="item.publication.image" :size="item.size" :placeholder="item.placeholder"
+                :bookmarked="item.bookmarked"></DaPost>
+      </div>
       <div id="anchor" ref="anchor"></div>
     </div>
   </section>
@@ -30,12 +36,14 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import DaStores from '../components/DaStores';
 import DaInsanePost from '../components/DaInsanePost';
+import DaPost from '../components/DaPost';
+import DaStores from '../components/DaStores';
 
 export default {
   components: {
     DaInsanePost,
+    DaPost,
     DaStores,
     DaIconSelector: () => import('../components/DaIconSelector'),
   },
@@ -104,6 +112,7 @@ export default {
 
 <style>
 @import '../styles/insane.pcss';
+@import '../styles/card.pcss';
 </style>
 
 <style scoped>
@@ -155,6 +164,16 @@ export default {
   & .insane {
     background: var(--color-background-highlight);
     border-radius: var(--size-space);
+  }
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  & .card {
+    margin: 10px 0;
   }
 }
 

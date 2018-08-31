@@ -201,6 +201,7 @@ footer {
   border-radius: 16px 16px 0 0;
   background: var(--color-background-highlight);
   box-shadow: 0 -1px 0 0 var(--color-background), 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 99;
 }
 
 button {
