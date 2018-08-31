@@ -231,24 +231,6 @@ button {
 }
 
 .dialog-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-  z-index: 100;
-
-  &:before {
-    content: ' ';
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--color-background);
-    opacity: 0.52;
-  }
 
   &.before-enter {
     &:before {
@@ -307,13 +289,6 @@ button {
 }
 
 .dialog {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  max-height: 100vh;
-  overflow: auto;
-
   & section {
     display: flex;
     flex-direction: column;

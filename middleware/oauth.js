@@ -4,7 +4,7 @@ export default function ({ params, query, redirect, store }) {
   return exchangeCode(params.provider, query)
     .then((profile) => {
       store.commit('user/updateProfile', profile);
-      return redirect('/bookmarks');
+      return redirect('/');
     })
-    .catch(() => redirect('/'));
+    .catch(() => redirect('/login'));
 };

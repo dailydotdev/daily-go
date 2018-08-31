@@ -1,4 +1,27 @@
-import { apiUrl } from './config';
+import { apiUrl, pageSize } from './config';
+
+const redirectLink = post =>
+  `${apiUrl}/r/${post.id}`;
+
+const ratioToSize = (ratio) => {
+  if (ratio > 1.5) {
+    return 'small';
+  }
+
+  if (ratio <= 0.75) {
+    return 'large';
+  }
+
+  return 'medium';
+};
+
+const mapPost = post =>
+  Object.assign({}, post, {
+    createdAt: new Date(post.createdAt),
+    publishedAt: post.publishedAt ? new Date(post.publishedAt) : null,
+    url: redirectLink(post),
+    size: ratioToSize(post.ratio),
+  });
 
 export const refreshToken = token =>
   fetch(`${apiUrl}/v1/auth/refresh`, {
@@ -14,6 +37,17 @@ export const refreshToken = token =>
 export const fetchPublications = () =>
   fetch(`${apiUrl}/v1/publications`, { credentials: 'include' })
     .then(response => response.json());
+
+export const fetchBookmarks = (latest, page, accessToken) =>
+  fetch(`${apiUrl}/v1/posts/bookmarks?latest=${latest.toISOString()}&page=${page}&pageSize=${pageSize}`,
+    {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(posts => posts.map(mapPost));
 
 export const logout = () =>
   fetch(`${apiUrl}/v1/users/logout`, {

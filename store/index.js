@@ -10,7 +10,7 @@ export const mutations = {
   loadFromCache(state, cached) {
     if (cached) {
       Object.keys(cached).forEach(key => {
-        state[key] = cached[key];
+        state[key] = Object.assign({}, state[key], cached[key]);
       });
     }
 

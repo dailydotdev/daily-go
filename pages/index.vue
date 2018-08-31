@@ -1,198 +1,181 @@
 <template>
-  <section class="container vertical align-center">
-    <div class="bookmark-illu flex">
-      <img src="~/assets/bookmark_illu.svg"/>
+  <section class="container">
+    <div class="empty vertical align-center" v-if="!posts.length">
+      <div class="bookmark-illu flex">
+        <img src="~/assets/bookmark_illu.svg"/>
+      </div>
+      <p class="res-subtext primary">
+        Add bookmark on your browser and you’ll see all your articles here.
+      </p>
+      <p class="res-subtext primary">
+        If you don’t have Daily extension, you can get it on chrome or firefox.
+      </p>
+      <DaStores></DaStores>
     </div>
-    <h2 class="res-subtext special3">Sign in to Daily to get full sync with your bookmarks</h2>
-    <div class="login dialog">
-      <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
-      <svgicon class="user" name="user"></svgicon>
-      <h1 class="massive">Sign in to Daily</h1>
-      <div class="subtext details">It’s exclusive product for developers. Sign in to see all the secret source and enjoy
-        with a
-        lot of content
-        and personal bookmark
+    <div class="feed" v-else>
+      <header>
+        <h2 class="subtext comment">/# {{title}} #/</h2>
+        <DaIconSelector :pressed="insaneMode"
+                        @toggle="toggleInsane(!insaneMode)" unpressed-icon="line" pressed-icon="card"/>
+      </header>
+      <div class="insane" v-if="insaneMode">
+        <DaInsanePost v-for="item in posts" :key="item.id" :post-id="item.id" :link="item.url"
+                      :title="item.title" :source="item.publication.name"
+                      :logo="item.publication.image" :bookmarked="item.bookmarked"></DaInsanePost>
       </div>
-      <div class="buttons">
-        <a class="github caption" :href="loginGithub">
-          <svgicon name="github"></svgicon>
-          <span>Sign in with GitHub</span>
-        </a>
-        <div class="or caption">or</div>
-        <a class="google" :href="loginGoogle">
-          <svgicon name="google"></svgicon>
-        </a>
-      </div>
+      <div id="anchor" ref="anchor"></div>
     </div>
   </section>
 </template>
 
 <script>
-import { getLoginLink } from '../services/login';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import DaStores from '../components/DaStores';
+import DaInsanePost from '../components/DaInsanePost';
 
 export default {
-  components: {},
+  components: {
+    DaInsanePost,
+    DaStores,
+    DaIconSelector: () => import('../components/DaIconSelector'),
+  },
 
-  middleware: 'anonymous',
-  layout: 'empty',
+  middleware: 'logged-in',
 
-  data() {
-    return {
-      loginGithub: getLoginLink('github'),
-      loginGoogle: getLoginLink('google'),
-    };
+  computed: {
+    ...mapState({
+      posts(state) {
+        if (this.showBookmarks) {
+          return state.feed.bookmarks;
+        }
+
+        return state.feed.posts;
+      },
+
+      page(state) {
+        return state.feed.page;
+      },
+
+      showBookmarks(state) {
+        return state.feed.showBookmarks;
+      },
+
+      insaneMode(state) {
+        return state.ui.insaneMode;
+      },
+    }),
+
+    title() {
+      return this.showBookmarks ? 'Your personal bookmarks' : 'News for developers';
+    },
+  },
+
+  methods: {
+    ...mapMutations({
+      toggleInsane: 'ui/setInsaneMode',
+    }),
+
+    ...mapActions({
+      fetchNextPage: 'feed/fetchNextPage',
+    }),
+  },
+
+  created() {
+    this.observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        if (this.fetchNextPage() && this.page > 0) {
+          // ga('send', 'event', 'Feed', 'Scroll', 'Next Page', this.page);
+        }
+      }
+    }, { root: null, rootMargin: '0px', threshold: 1 });
   },
 
   mounted() {
-    import('../icons/user');
-    import('../icons/github');
-    import('../icons/google');
-  }
+    this.observer.observe(this.$refs.anchor);
+  },
+
+  fetch({ store }) {
+    // TODO: remember to remove
+    return store.dispatch('feed/fetchPublications')
+      .then(() => store.dispatch('feed/fetchNextPage'));
+  },
 };
 </script>
 
+<style>
+@import '../styles/insane.pcss';
+</style>
+
 <style scoped>
-.container {
-  position: relative;
+.empty {
   height: 100vh;
-}
+  padding: 0 calc(var(--size-space) * 3) var(--size-footer);
 
-.bookmark-illu {
-  margin: calc(var(--size-space) * 3) 0 calc(var(--size-space) / 2);
-}
-
-h2 {
-  margin: calc(var(--size-space) * 2) calc(var(--size-space) * 4);
-  text-align: center;
-}
-
-.login {
-  position: relative;
-  display: flex;
-  height: 337px;
-  align-self: stretch;
-  flex-direction: column;
-  align-items: center;
-  padding: calc(var(--size-space) * 3) calc(var(--size-space) * 4);
-  box-shadow: 0 -1px 0 0 var(--color-background), 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
-
-  & .user {
-    width: 64px;
-    height: 64px;
-    margin-bottom: calc(var(--size-space) * 2);
+  & > * {
+    margin: calc(var(--size-space) * 1.5) 0;
   }
 
-  & .logo {
-    position: absolute;
-    left: calc(var(--size-space) * 3);
-    top: calc(var(--size-space) * 3);
-    width: auto;
-    height: 22px;
+  & .bookmark-illu {
+    margin-top: 56px;
   }
 
-  & h1 {
-    color: var(--color-github);
-    text-transform: uppercase;
-    margin: var(--size-space) 0;
-    font-weight: bold;
-  }
-
-  & .details {
-    color: var(--color-primary);
-    margin: var(--size-space) 0;
-    font-style: italic;
+  & p {
     text-align: center;
   }
 
-  & .buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-top: calc(var(--size-space) * 2);
-
-    & a {
-      background: none;
-      border: none;
-      margin: 0;
-      transition: background 0.2s linear, border 0.2s linear;
-
-      & .svg-icon {
-        color: inherit;
-        width: 20px;
-        height: 20px;
-        transition: color 0.2s linear;
-      }
-    }
-
-    & .github {
-      display: flex;
-      height: 40px;
-      padding: 0 calc(var(--size-space) * 2) 0 10px;
-      flex-direction: row;
-      align-items: center;
-      color: var(--color-github-invert);
-      background: var(--color-github);
-      border-radius: var(--size-space);
-      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
-
-      & span {
-        margin-left: 10px;
-      }
-    }
-
-    & .or {
-      margin: 0 calc(var(--size-space) * 2);
-      color: var(--color-comment);
-      font-style: italic;
-      text-transform: uppercase;
-    }
-
-    & .google {
-      position: relative;
-      width: 33px;
-      height: 33px;
-      color: var(--color-primary);
-      border-radius: var(--size-space);
-      border: 1px solid var(--color-primary);
-
-      & > * {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        transition: opacity 0.2s linear;
-        will-change: opacity;
-      }
-    }
+  & .stores {
+    margin-bottom: 40px;
   }
 }
 
-@media (--mobile-m) {
-  .illu {
-    margin-top: 55px;
-    margin-bottom: 0;
-    flex: 2;
+.feed {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: var(--size-space) calc(var(--size-space) * 2);
+  padding-bottom: var(--size-footer);
+
+  & > * {
+    margin: var(--size-space) 0;
   }
 
-  h2 {
+  & header {
     display: flex;
-    margin: 0 calc(var(--size-space) * 3);
+    flex-direction: row;
     align-items: center;
-    flex: 1;
+    justify-content: space-between;
   }
 
-  .login {
-    height: 387px;
+  & h2 {
+    font-style: italic;
+    text-transform: uppercase;
+  }
 
-    & .details {
-      font-size: 16px;
-      line-height: 20px;
+  & .insane {
+    background: var(--color-background-highlight);
+    border-radius: var(--size-space);
+  }
+}
+
+#anchor {
+  position: absolute;
+  bottom: 100vh;
+  left: 0;
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+}
+
+@media (--mobile-m) {
+  .empty {
+    & > * {
+      margin: 20px 0;
     }
 
-    & .buttons {
-      margin-top: 40px;
+    & p {
+      font-size: 18px;
+      line-height: 24px;
     }
   }
 }

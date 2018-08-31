@@ -56,9 +56,9 @@ export default {
 }
 
 .svg-icon {
-  width: 28px;
-  height: 28px;
-  color: var(--color-comment);
+  width: 100%;
+  height: 100%;
+  color: inherit;
 }
 
 .pressed {

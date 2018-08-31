@@ -4,17 +4,15 @@ export const state = () => ({ profile: null });
 
 export const mutations = {
   updateProfile(state, profile) {
-    const newProfile = Object.assign({}, profile);
-    if (newProfile.newUser) {
-      // TODO: need to set something temporary when this is a new user
-      delete newProfile.newUser;
-    }
-
-    state.profile = newProfile;
+    state.profile = profile;
   },
 
   refreshToken(state, newToken) {
     state.profile = Object.assign({}, state.profile, newToken);
+  },
+
+  notNewUser(state) {
+    state.profile.newUser = false;
   },
 };
 
@@ -26,6 +24,7 @@ export const actions = {
   },
   logout({ state, commit }) {
     commit('updateProfile', {});
+    // TODO: delete cache
     return logout();
   }
 };

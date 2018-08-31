@@ -1,0 +1,43 @@
+.insane-row {
+  display: flex;
+  padding: calc(var(--size-space) * 2);
+  flex-direction: row;
+  align-content: stretch;
+  overflow: hidden;
+  background: none;
+  border-bottom: 1px solid var(--color-background);
+
+  & > * {
+    margin: 0 var(--size-space);
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  & .content {
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+      margin: 5px 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    & .publication .comment {
+      font-style: italic;
+    }
+  }
+
+}
