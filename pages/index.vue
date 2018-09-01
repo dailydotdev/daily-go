@@ -51,6 +51,7 @@ export default {
   },
 
   middleware: 'logged-in',
+  layout: 'profile',
 
   data() {
     return {

@@ -34,7 +34,6 @@ export default {
   components: {},
 
   middleware: 'anonymous',
-  layout: 'empty',
 
   data() {
     return {
