@@ -7,21 +7,56 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Daily',
+    title: 'Daily Now - Source for Busy Developers',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      {
+        name: 'keyword',
+        content: 'TEM, The Elegant Monkeys, Daily, Fullstack, Web, Technologies, Javascript, HTML, CSS, nodejs, rss, Chrome Extension, Firefox Addon'
+      }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+  },
+
+  meta: {
+    name: 'Daily Now',
+    theme_color: '#393C3E',
+    ogSiteName: 'Daily Now - Source for Busy Developers',
+    ogTitle: 'Daily Now - Source for Busy Developers',
+    ogImage: 'https://www.dailynow.co/static/cover.jpg',
+    ogUrl: 'https://pwa.dailynow.co/',
+    twitterCard: 'summary_large_image',
+    twitterSite: '@dailynowco'
+  },
+
+  manifest: {
+    description: 'We help devs focus on code instead of searching for news',
+  },
+
+  workbox: {
+    runtimeCaching: [
+      {
+        urlPattern: 'https://storage.googleapis.com/devkit-assets/images/*',
+        handler: 'cacheFirst',
+        strategyOptions: {
+          cacheName: 'post-images',
+          cacheExpiration: {
+            maxEntries: 100,
+          }
+        },
+      },
+      {
+        urlPattern: 'https://storage.googleapis.com/devkit-assets/logos/*',
+        handler: 'cacheFirst',
+        strategyOptions: {
+          cacheName: 'publication-logos',
+        },
+      },
+    ],
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#FFFFFF' },
+  loading: false,
 
   /*
   ** Global CSS

@@ -1,7 +1,7 @@
 {
   "name": "daily-app",
   "version": "1.0.0",
-  "description": "Daily progressive web application",
+  "description": "Daily Now gathers the latest dev & tech posts in your new tab on Chrome and Firefox. Every single day new and updated development technologies are being released across the web. For us as developers, staying updated is a huge hassle. Don’t bother looking anywhere else, simply install the extension, open a new tab and you’re all set!",
   "private": true,
   "scripts": {
     "dev": "nuxt",
