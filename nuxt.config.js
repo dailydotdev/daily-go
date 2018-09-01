@@ -21,7 +21,7 @@ module.exports = {
     theme_color: '#393C3E',
     ogSiteName: 'Daily Now - Source for Busy Developers',
     ogTitle: 'Daily Now - Source for Busy Developers',
-    ogImage: 'https://www.dailynow.co/static/cover.jpg',
+    ogImage: 'https://www.dailynow.co/cover.jpg',
     ogUrl: 'https://pwa.dailynow.co/',
     twitterCard: 'summary_large_image',
     twitterSite: '@dailynowco'
