@@ -40,6 +40,12 @@ export default {
       closeCongrats: 'user/notNewUser',
     }),
   },
+
+  mounted() {
+    requestIdleCallback(() => {
+      this.$store.dispatch('feed/fetchPublications');
+    });
+  }
 };
 </script>
 <style scoped>

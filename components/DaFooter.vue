@@ -49,6 +49,7 @@
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { FLIP, FLP } from '../services/flip';
 import DaStores from './DaStores';
+import { themes } from '../services/theme';
 
 export default {
   name: 'DaFooter',
@@ -60,7 +61,6 @@ export default {
   data() {
     return {
       opened: false,
-      theme: false,
     };
   },
 
@@ -90,7 +90,11 @@ export default {
           [pubs[i], pubs[j]] = [pubs[j], pubs[i]];
         }
         return pubs.slice(0, size);
-      }
+      },
+
+      theme(state) {
+        return themes.indexOf(state.ui.theme) > 0;
+      },
     }),
 
     ...mapGetters({
@@ -109,7 +113,10 @@ export default {
     },
 
     onToggleTheme(pressed) {
-      this.theme = pressed;
+      const newTheme = pressed ? themes[1] : themes[0];
+      setTimeout(() => this.setTheme(newTheme));
+
+      // ga('send', 'event', 'Header', 'Theme', this.currentTheme);
     },
     // onToggleBookmark() {
     //
@@ -172,6 +179,7 @@ export default {
 
     ...mapActions({
       logout: 'user/logout',
+      setTheme: 'ui/setTheme',
     }),
   },
 

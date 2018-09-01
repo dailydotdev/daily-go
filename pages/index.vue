@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <div class="empty vertical align-center" v-if="!posts.length">
+    <div class="empty vertical align-center" v-if="!posts || !posts.length">
       <div class="bookmark-illu flex">
         <img src="~/assets/bookmark_illu.svg"/>
       </div>
@@ -50,6 +50,12 @@ export default {
 
   middleware: 'logged-in',
 
+  data() {
+    return {
+      observing: false,
+    };
+  },
+
   computed: {
     ...mapState({
       posts(state) {
@@ -86,6 +92,27 @@ export default {
     ...mapActions({
       fetchNextPage: 'feed/fetchNextPage',
     }),
+
+    observe() {
+      if (!this.observing && this.$refs.anchor) {
+        setTimeout(() => this.observer.observe(this.$refs.anchor));
+        this.observing = true;
+      }
+    }
+  },
+
+  watch: {
+    posts() {
+      this.observe();
+    },
+  },
+
+  mounted() {
+    this.observe();
+
+    requestIdleCallback(() => {
+      this.$store.dispatch('feed/fetchNextPage');
+    });
   },
 
   created() {
@@ -96,16 +123,6 @@ export default {
         }
       }
     }, { root: null, rootMargin: '0px', threshold: 1 });
-  },
-
-  mounted() {
-    this.observer.observe(this.$refs.anchor);
-  },
-
-  fetch({ store }) {
-    // TODO: remember to remove
-    return store.dispatch('feed/fetchPublications')
-      .then(() => store.dispatch('feed/fetchNextPage'));
   },
 };
 </script>

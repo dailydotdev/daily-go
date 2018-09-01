@@ -1,8 +1,14 @@
 import { refreshToken, logout } from '../services/api';
 
-export const state = () => ({ profile: null });
+const initialState = { profile: null };
+
+export const state = () => Object.assign({}, initialState);
 
 export const mutations = {
+  reset(state) {
+    state = Object.assign({}, initialState);
+  },
+
   updateProfile(state, profile) {
     state.profile = profile;
   },
@@ -23,8 +29,9 @@ export const actions = {
         commit('refreshToken', { accessToken: accessToken.token, expiresIn: accessToken.expiresIn }));
   },
   logout({ state, commit }) {
-    commit('updateProfile', {});
-    // TODO: delete cache
+    commit('reset');
+    commit('ui/reset', null, { root: true });
+    commit('feed/reset', null, { root: true });
     return logout();
   }
 };

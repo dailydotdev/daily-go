@@ -1,6 +1,7 @@
 import cache from './plugins/cache';
+import sync from './plugins/sync';
 
-export const plugins = [cache];
+export const plugins = [cache, sync];
 
 export const state = () => ({
   initialized: false,

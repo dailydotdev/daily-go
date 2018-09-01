@@ -1,13 +1,15 @@
 import { fetchPublications, fetchBookmarks } from '../services/api';
 
-export const state = () => ({
+const initialState = {
   publications: [],
   page: 0,
   latest: null,
   loading: false,
   bookmarks: null,
   showBookmarks: true,
-});
+};
+
+export const state = () => Object.assign({}, initialState);
 
 const handleNewPage = (state, commit, suffix, posts) => {
   if (!state.page) {
@@ -31,6 +33,10 @@ const fetchBookmarksFeed = (state, commit, accessToken) =>
     });
 
 export const mutations = {
+  reset(state) {
+    state = Object.assign({}, initialState);
+  },
+
   setPublications(state, pubs) {
     state.publications = pubs;
   },

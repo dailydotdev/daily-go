@@ -49,6 +49,26 @@ export const fetchBookmarks = (latest, page, accessToken) =>
     .then(response => response.json())
     .then(posts => posts.map(mapPost));
 
+export const fetchSettings = accessToken =>
+  fetch(`${apiUrl}/v1/settings`, {
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+    },
+    credentials: 'include',
+  })
+    .then(response => response.json());
+
+export const updateSettings = (settings, accessToken) =>
+  fetch(`${apiUrl}/v1/settings`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(settings),
+    credentials: 'include',
+  });
+
 export const logout = () =>
   fetch(`${apiUrl}/v1/users/logout`, {
     method: 'POST',
