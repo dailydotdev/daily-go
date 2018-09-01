@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import 'intersection-observer';
 import { mapState, mapMutations, mapActions } from 'vuex';
 import DaInsanePost from '../components/DaInsanePost';
 import DaPost from '../components/DaPost';
