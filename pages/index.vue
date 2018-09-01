@@ -21,13 +21,15 @@
       <div class="insane" v-if="insaneMode">
         <DaInsanePost v-for="item in posts" :key="item.id" :post-id="item.id" :link="item.url"
                       :title="item.title" :source="item.publication.name"
-                      :logo="item.publication.image" :bookmarked="item.bookmarked"></DaInsanePost>
+                      :logo="item.publication.image" :bookmarked="item.bookmarked"
+                      @toggle-bookmark="toggleBookmark({id: $event, bookmarked: !item.bookmarked})"></DaInsanePost>
       </div>
       <div class="cards" v-else>
         <DaPost v-for="item in posts" :key="item.id" :post-id="item.id" :link="item.url"
                 :img="item.image" :title="item.title" :source="item.publication.name"
                 :logo="item.publication.image" :size="item.size" :placeholder="item.placeholder"
-                :bookmarked="item.bookmarked"></DaPost>
+                :bookmarked="item.bookmarked"
+                @toggle-bookmark="toggleBookmark({id: $event, bookmarked: !item.bookmarked})"></DaPost>
       </div>
       <div id="anchor" ref="anchor"></div>
     </div>
@@ -87,6 +89,7 @@ export default {
   methods: {
     ...mapMutations({
       toggleInsane: 'ui/setInsaneMode',
+      toggleBookmark: 'feed/toggleBookmark',
     }),
 
     ...mapActions({

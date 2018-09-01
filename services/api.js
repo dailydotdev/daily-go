@@ -69,6 +69,27 @@ export const updateSettings = (settings, accessToken) =>
     credentials: 'include',
   });
 
+export const addBookmarks = (bookmarks, accessToken) =>
+  fetch(`${apiUrl}/v1/posts/bookmarks`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(bookmarks),
+    credentials: 'include',
+  });
+
+export const removeBookmark = (postId, accessToken) =>
+  fetch(`${apiUrl}/v1/posts/${postId}/bookmark`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${accessToken}`,
+    },
+    credentials: 'include',
+  });
+
 export const logout = () =>
   fetch(`${apiUrl}/v1/users/logout`, {
     method: 'POST',

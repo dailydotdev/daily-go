@@ -79,7 +79,7 @@ export default {
     onBookmark() {
       // ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
       // mixpanel.track('Post Bookmark', { source: this.source, toggle: !this.bookmarked });
-      // this.$emit('toggle-bookmark', this.postId);
+      this.$emit('toggle-bookmark', this.postId);
     },
   },
 

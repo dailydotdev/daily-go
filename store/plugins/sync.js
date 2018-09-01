@@ -1,4 +1,4 @@
-import { updateSettings, fetchSettings } from '../../services/api';
+import { updateSettings, fetchSettings, addBookmarks, removeBookmark } from '../../services/api';
 
 let syncing = false;
 
@@ -38,6 +38,14 @@ const plugin = (store) => {
       case 'loadFromCache':
       case 'user/updateProfile':
         requestIdleCallback(() => syncSettingsFromServer(store, state));
+        break;
+      case 'feed/toggleBookmark':
+        const { id, bookmarked } = mutation.payload;
+        if (bookmarked) {
+          addBookmarks([id], state.user.profile.accessToken);
+        } else {
+          removeBookmark(id, state.user.profile.accessToken);
+        }
         break;
       case 'ui/setTheme':
       case 'ui/setInsaneMode':

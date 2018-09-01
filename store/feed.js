@@ -66,6 +66,17 @@ export const mutations = {
   addBookmarks(state, bookmarks) {
     state.bookmarks = state.bookmarks.concat(bookmarks);
   },
+
+  toggleBookmark(state, { id, bookmarked }) {
+    // const postIndex = setPostBookmark(state, id, bookmarked);
+
+    if (!bookmarked) {
+      const index = state.bookmarks.findIndex(bookmark => bookmark.id === id);
+      state.bookmarks.splice(index, 1);
+    } else {
+      // state.bookmarks.unshift(state.posts[postIndex]);
+    }
+  },
 };
 
 export const actions = {
