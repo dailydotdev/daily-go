@@ -32,6 +32,8 @@ module.exports = {
     short_name: 'Daily Now',
     description: 'We help devs focus on code instead of searching for news',
     background_color: '#4D96F1',
+    theme_color: '#393C3E',
+    start_url: '/?pwa=true',
   },
 
   workbox: {

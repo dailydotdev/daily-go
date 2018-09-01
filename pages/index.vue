@@ -2,7 +2,7 @@
   <section class="container">
     <div class="empty vertical align-center" v-if="!posts || !posts.length">
       <div class="bookmark-illu flex">
-        <img src="~/assets/bookmark_illu.svg"/>
+        <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
       </div>
       <p class="res-subtext primary">
         Add bookmark on your browser and you’ll see all your articles here.

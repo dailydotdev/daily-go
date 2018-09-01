@@ -1,7 +1,7 @@
 <template>
   <section class="container vertical align-center">
     <div class="bookmark-illu flex">
-      <img src="~/assets/bookmark_illu.svg"/>
+      <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
     </div>
     <h2 class="res-subtext special3">Sign in to Daily to get full sync with your bookmarks</h2>
     <div class="login dialog">
@@ -19,7 +19,7 @@
           <span>Sign in with GitHub</span>
         </a>
         <div class="or caption">or</div>
-        <a class="google" :href="loginGoogle">
+        <a class="google" :href="loginGoogle" title="Sign in with Google">
           <svgicon name="google"></svgicon>
         </a>
       </div>
