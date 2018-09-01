@@ -58,6 +58,12 @@ module.exports = {
   */
   loading: false,
 
+  loadingIndicator: {
+    name: 'three-bounce',
+    color: '#848886',
+    background: '#272727',
+  },
+
   /*
   ** Global CSS
   */

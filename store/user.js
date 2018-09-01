@@ -1,4 +1,5 @@
 import { refreshToken, logout } from '../services/api';
+import { deleteState } from '../services/storage';
 
 const initialState = { profile: null };
 
@@ -32,7 +33,10 @@ export const actions = {
     commit('reset');
     commit('ui/reset', null, { root: true });
     commit('feed/reset', null, { root: true });
-    return logout();
+    return Promise.all([
+      logout(),
+      deleteState(),
+    ]);
   }
 };
 

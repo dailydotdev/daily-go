@@ -156,3 +156,7 @@ button {
     overflow: auto;
   }
 }
+
+#__nuxt .spinner {
+  width: 80px;
+}
