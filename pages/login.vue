@@ -18,7 +18,7 @@
           <svgicon name="github"></svgicon>
           <span>Sign in with GitHub</span>
         </a>
-        <div class="or caption">or</div>
+        <div class="or subtext">or</div>
         <a class="google" :href="loginGoogle" title="Sign in with Google">
           <svgicon name="google"></svgicon>
         </a>
@@ -142,6 +142,7 @@ h2 {
     & .or {
       margin: 0 calc(var(--size-space) * 2);
       color: var(--color-comment);
+      font-weight: bold;
       font-style: italic;
       text-transform: uppercase;
     }
