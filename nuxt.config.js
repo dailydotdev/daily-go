@@ -28,7 +28,10 @@ module.exports = {
   },
 
   manifest: {
+    name: 'Daily Now',
+    short_name: 'Daily Now',
     description: 'We help devs focus on code instead of searching for news',
+    background_color: '#4D96F1',
   },
 
   workbox: {
