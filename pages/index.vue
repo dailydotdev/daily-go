@@ -42,6 +42,7 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import DaInsanePost from '../components/DaInsanePost';
 import DaPost from '../components/DaPost';
 import DaStores from '../components/DaStores';
+import { trackPage } from '../services/analytics';
 
 export default {
   components: {
@@ -90,7 +91,7 @@ export default {
 
   methods: {
     ...mapMutations({
-      toggleInsane: 'ui/setInsaneMode',
+      setInsaneMode: 'ui/setInsaneMode',
       toggleBookmark: 'feed/toggleBookmark',
     }),
 
@@ -103,7 +104,12 @@ export default {
         setTimeout(() => this.observer.observe(this.$refs.anchor));
         this.observing = true;
       }
-    }
+    },
+
+    toggleInsane(pressed) {
+      this.setInsaneMode(pressed);
+      ga('send', 'event', 'Home', 'Insane', pressed);
+    },
   },
 
   watch: {
@@ -113,10 +119,14 @@ export default {
   },
 
   mounted() {
-    this.observe();
+    // Workaround as nuxt currently calls mounted twice
+    this.$nextTick(() => {
+      trackPage('bookmarks');
+      this.observe();
 
-    requestIdleCallback(() => {
-      this.$store.dispatch('feed/fetchNextPage');
+      requestIdleCallback(() => {
+        this.$store.dispatch('feed/fetchNextPage');
+      });
     });
   },
 
@@ -124,7 +134,7 @@ export default {
     this.observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         if (this.fetchNextPage() && this.page > 0) {
-          // ga('send', 'event', 'Feed', 'Scroll', 'Next Page', this.page);
+          ga('send', 'event', 'Feed', 'Scroll', 'Next Page', this.page);
         }
       }
     }, { root: null, rootMargin: '0px', threshold: 1 });

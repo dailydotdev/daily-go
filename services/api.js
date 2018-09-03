@@ -90,6 +90,11 @@ export const removeBookmark = (postId, accessToken) =>
     credentials: 'include',
   });
 
+export const fetchUserId = () =>
+  fetch(`${apiUrl}/v1/users/me`, { credentials: 'include' })
+    .then(response => response.json())
+    .then(user => user.id);
+
 export const logout = () =>
   fetch(`${apiUrl}/v1/users/logout`, {
     method: 'POST',

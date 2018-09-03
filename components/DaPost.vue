@@ -21,7 +21,7 @@
 </template>
 
 <script>
-// import mixpanel from 'mixpanel-browser';
+import mixpanel from 'mixpanel-browser';
 import AsyncImg from './AsyncImg';
 
 export default {
@@ -72,13 +72,13 @@ export default {
 
   methods: {
     onClick() {
-      // ga('send', 'event', 'Post', 'Click', this.source);
-      // mixpanel.track('Post Click', { source: this.source });
+      ga('send', 'event', 'Post', 'Click', this.source);
+      mixpanel.track('Post Click', { source: this.source });
     },
 
     onBookmark() {
-      // ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
-      // mixpanel.track('Post Bookmark', { source: this.source, toggle: !this.bookmarked });
+      ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
+      mixpanel.track('Post Bookmark', { source: this.source, toggle: !this.bookmarked });
       this.$emit('toggle-bookmark', this.postId);
     },
   },

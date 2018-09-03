@@ -87,6 +87,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/ga.js',
     '~/plugins/external.js',
     '~/plugins/filters.js',
   ],

@@ -2,7 +2,7 @@
   <div>
     <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter" @leave="leave" :css="false">
       <footer v-if="!opened" ref="footer">
-        <button class="profile-img btn-icon" v-if="isLoggedIn" @click="opened = true" ref="footerProfile">
+        <button class="profile-img btn-icon" v-if="isLoggedIn" @click="openProfile" ref="footerProfile">
           <img :src="profileImage" alt="Profile image"/>
         </button>
         <!--<DaSwitch icon="bookmark" :checked="true" @toggle="onToggleBookmark"></DaSwitch>-->
@@ -14,7 +14,7 @@
           <section class="profile-section">
             <div class="header">
               <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
-              <button classs="btn-icon" @click="close()">
+              <button classs="btn-icon" @click="closeProfile">
                 <svgicon name="x"></svgicon>
               </button>
             </div>
@@ -103,11 +103,18 @@ export default {
   },
 
   methods: {
-    close() {
+    closeProfile() {
+      ga('send', 'event', 'Footer', 'Profile', 'Close');
       this.opened = false;
     },
 
+    openProfile() {
+      ga('send', 'event', 'Footer', 'Profile', 'Open');
+      this.opened = true;
+    },
+
     onLogout() {
+      ga('send', 'event', 'Profile', 'Logout');
       this.logout()
         .then(() => this.$router.go({ path: '/' }));
     },
@@ -116,7 +123,7 @@ export default {
       const newTheme = pressed ? themes[1] : themes[0];
       setTimeout(() => this.setTheme(newTheme));
 
-      // ga('send', 'event', 'Header', 'Theme', this.currentTheme);
+      ga('send', 'event', 'Profile', 'Theme', this.theme);
     },
     // onToggleBookmark() {
     //

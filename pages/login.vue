@@ -14,12 +14,12 @@
         and personal bookmark
       </div>
       <div class="buttons">
-        <a class="github caption" :href="loginGithub">
+        <a class="github caption" :href="loginGithub" @click="trackLogin('github')">
           <svgicon name="github"></svgicon>
           <span>Sign in with GitHub</span>
         </a>
         <div class="or subtext">or</div>
-        <a class="google" :href="loginGoogle" title="Sign in with Google">
+        <a class="google" :href="loginGoogle" title="Sign in with Google" @click="trackLogin('google')">
           <svgicon name="google"></svgicon>
         </a>
       </div>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import mixpanel from 'mixpanel-browser';
+import { trackPage } from '../services/analytics';
 import { getLoginLink } from '../services/login';
 
 export default {
@@ -42,7 +44,17 @@ export default {
     };
   },
 
+  methods: {
+    trackLogin(provider) {
+      ga('send', 'event', 'Login', 'Initialized', provider);
+      mixpanel.track('Login Initialized', { provider });
+    },
+  },
+
   mounted() {
+    // Workaround as nuxt currently calls mounted twice
+    this.$nextTick(() => trackPage('login'));
+
     import('../icons/user');
     import('../icons/github');
     import('../icons/google');
