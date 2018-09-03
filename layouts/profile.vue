@@ -20,6 +20,7 @@
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex';
+import '../services/rIC';
 import DaFooter from '../components/DaFooter';
 
 export default {
