@@ -18,6 +18,7 @@ module.exports = {
 
   meta: {
     name: 'Daily Now',
+    viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
     theme_color: '#393C3E',
     ogSiteName: 'Daily Now - Source for Busy Developers',
     ogTitle: 'Daily Now - Source for Busy Developers',
