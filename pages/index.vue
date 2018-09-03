@@ -202,7 +202,8 @@ export default {
 .cards {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-self: center;
+  width: 100%;
 
   & .card {
     margin: 10px 0;

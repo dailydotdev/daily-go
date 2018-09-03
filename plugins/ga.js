@@ -17,4 +17,4 @@ export default () => {
   // ga('set', 'checkProtocolTask', () => {
   // });
   // ga('require', 'displayfeatures');
-}
+};

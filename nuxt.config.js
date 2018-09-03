@@ -91,6 +91,7 @@ module.exports = {
     '~/plugins/ga.js',
     '~/plugins/external.js',
     '~/plugins/filters.js',
+    '~/plugins/fonts.js',
   ],
 
   /*
