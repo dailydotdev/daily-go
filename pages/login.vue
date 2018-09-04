@@ -153,7 +153,7 @@ h2 {
 
     & .or {
       margin: 0 calc(var(--size-space) * 2);
-      color: var(--color-comment);
+      color: var(--color-primary);
       font-weight: bold;
       font-style: italic;
       text-transform: uppercase;
