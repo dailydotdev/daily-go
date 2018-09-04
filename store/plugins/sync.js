@@ -8,7 +8,7 @@ const syncSettingsFromServer = (store, state) => {
     fetchSettings(state.user.profile.accessToken)
       .then(settings => {
         syncing = true;
-        if (settings.theme !== state.theme) {
+        if (settings.theme !== state.ui.theme) {
           store.dispatch('ui/setTheme', settings.theme);
         }
         store.commit('ui/setInsaneMode', settings.appInsaneMode);

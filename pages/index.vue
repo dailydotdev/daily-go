@@ -204,6 +204,7 @@ export default {
   flex-direction: column;
   align-self: center;
   width: 100%;
+  max-width: 330px;
 
   & .card {
     margin: 10px 0;

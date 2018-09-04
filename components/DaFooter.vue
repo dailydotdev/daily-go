@@ -149,7 +149,7 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
-        setTimeout(() => {
+        this.$nextTick(() => {
           this.$refs.dialogContainer.classList.add('enter');
           setTimeout(() => {
             this.dialogAnim.play().then(done);
