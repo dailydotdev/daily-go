@@ -53,11 +53,13 @@ export default {
 
   mounted() {
     // Workaround as nuxt currently calls mounted twice
-    this.$nextTick(() => trackPage('login'));
+    this.$nextTick(() => {
+      import('../icons/user');
+      import('../icons/github');
+      import('../icons/google');
 
-    import('../icons/user');
-    import('../icons/github');
-    import('../icons/google');
+      trackPage('login');
+    });
   }
 };
 </script>

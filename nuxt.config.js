@@ -15,6 +15,10 @@ module.exports = {
       }
     ],
     noscript: [{ innerHTML: 'This website requires JavaScript.' }],
+    link: [
+      { rel: 'preconnect', href: 'https://www.google-analytics.com' },
+      { rel: 'preconnect', href: 'https://ajax.googleapis.com' },
+    ]
   },
 
   meta: {
@@ -44,7 +48,7 @@ module.exports = {
     runtimeCaching: [
       {
         urlPattern: 'https://storage.googleapis.com/devkit-assets/images/*',
-        handler: 'cacheOnly',
+        handler: 'cacheFirst',
         strategyOptions: {
           cacheName: 'post-images',
           cacheExpiration: {
@@ -54,7 +58,7 @@ module.exports = {
       },
       {
         urlPattern: 'https://storage.googleapis.com/devkit-assets/logos/*',
-        handler: 'cacheOnly',
+        handler: 'cacheFirst',
         strategyOptions: {
           cacheName: 'publication-logos',
         },
