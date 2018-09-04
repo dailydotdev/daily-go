@@ -18,6 +18,7 @@ module.exports = {
     link: [
       { rel: 'preconnect', href: 'https://www.google-analytics.com' },
       { rel: 'preconnect', href: 'https://ajax.googleapis.com' },
+      { rel: 'preconnect', href: process.env.API_URL },
     ]
   },
 
