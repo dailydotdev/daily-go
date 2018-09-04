@@ -14,6 +14,7 @@ module.exports = {
         content: 'TEM, The Elegant Monkeys, Daily, Fullstack, Web, Technologies, Javascript, HTML, CSS, nodejs, rss, Chrome Extension, Firefox Addon'
       }
     ],
+    noscript: [{ innerHTML: 'This website requires JavaScript.' }],
   },
 
   meta: {
@@ -22,8 +23,10 @@ module.exports = {
     theme_color: '#393C3E',
     ogSiteName: 'Daily Now - Source for Busy Developers',
     ogTitle: 'Daily Now - Source for Busy Developers',
-    ogImage: 'https://www.dailynow.co/cover.jpg',
-    ogUrl: 'https://pwa.dailynow.co/',
+    ogImage: {
+      path: '/cover.jpg',
+    },
+    ogHost: 'https://pwa.dailynow.co',
     twitterCard: 'summary_large_image',
     twitterSite: '@dailynowco'
   },
@@ -41,7 +44,7 @@ module.exports = {
     runtimeCaching: [
       {
         urlPattern: 'https://storage.googleapis.com/devkit-assets/images/*',
-        handler: 'cacheFirst',
+        handler: 'cacheOnly',
         strategyOptions: {
           cacheName: 'post-images',
           cacheExpiration: {
@@ -51,10 +54,18 @@ module.exports = {
       },
       {
         urlPattern: 'https://storage.googleapis.com/devkit-assets/logos/*',
-        handler: 'cacheFirst',
+        handler: 'cacheOnly',
         strategyOptions: {
           cacheName: 'publication-logos',
         },
+      },
+      {
+        urlPattern: 'https://www.google-analytics.com/analytics.js',
+        handler: 'cacheFirst',
+      },
+      {
+        urlPattern: 'https://ajax.googleapis.com/ajax/libs/webfont/*',
+        handler: 'cacheFirst',
       },
     ],
   },
@@ -113,6 +124,11 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    optimization: {
+      splitChunks: {
+        name: true
+      }
+    },
     /*
     ** You can extend webpack config here
     */

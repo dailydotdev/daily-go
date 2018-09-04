@@ -1,1 +1,12 @@
-@font-face{font-family:DejaVuSansMono;font-display:auto;src:url(fonts/DejaVuSansMono.eot);src:url(fonts/DejaVuSansMono.eot?#iefix) format("embedded-opentype"),url(fonts/DejaVuSansMono.otf) format("opentype"),url(fonts/DejaVuSansMono.svg) format("svg"),url(fonts/DejaVuSansMono.ttf) format("truetype"),url(fonts/DejaVuSansMono.woff) format("woff"),url(fonts/DejaVuSansMono.woff2) format("woff2")}@font-face{font-family:DejaVuSansMono;font-display:auto;src:url(fonts/DejaVuSansMono-Oblique.eot);src:url(fonts/DejaVuSansMono-Oblique.eot?#iefix) format("embedded-opentype"),url(fonts/DejaVuSansMono-Oblique.otf) format("opentype"),url(fonts/DejaVuSansMono-Oblique.svg) format("svg"),url(fonts/DejaVuSansMono-Oblique.ttf) format("truetype"),url(fonts/DejaVuSansMono-Oblique.woff) format("woff"),url(fonts/DejaVuSansMono-Oblique.woff2) format("woff2");font-style:italic}
+@font-face {
+  font-family: 'DejaVuSansMono';
+  font-display: swap;
+  src: local('DejaVuSansMono'), url(fonts/DejaVuSansMono.woff2) format("woff2"), url(fonts/DejaVuSansMono.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'DejaVuSansMono';
+  font-display: swap;
+  src: local('DejaVuSansMono-Oblique'), url(fonts/DejaVuSansMono-Oblique.woff2) format("woff2"), url(fonts/DejaVuSansMono-Oblique.woff) format("woff");
+  font-style: italic
+}
