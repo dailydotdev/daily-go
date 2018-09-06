@@ -12,6 +12,46 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
   background: var(--color-background);
+
+  --color-background: #272727;
+  --color-background-highlight: #393C3E;
+  --color-light-shadow: #525252;
+  --color-dark-shadow: #272727;
+  --color-tile-border: #272727;
+  --color-comment: #848886;
+  --color-primary: #BFBEBE;
+  --color-secondary: #66696C;
+  --color-highlight: #4D96F1;
+  --color-special1: #FDC769;
+  --color-special2: #9DCB74;
+  --color-special3: #D77E2B;
+  --color-special4: #698C5A;
+  --color-github: white;
+  --color-github-invert: black;
+
+  --shadow-offset: 8px;
+
+  &.bright {
+    --color-background: #EAEAEA;
+    --color-background-highlight: #F8F8F8;
+    --color-light-shadow: #CFCFCF;
+    --color-dark-shadow: #CFCFCF;
+    --color-tile-border: #F3F3F3;
+    --color-comment: #AAAAAA;
+    --color-primary: #848886;
+    --color-secondary: #BFBEBE;
+    --color-highlight: #4D96F1;
+    --color-special1: #FDC769;
+    --color-special2: #9DCB74;
+    --color-special3: #DE7C20;
+    --color-special4: #5F9F44;
+    --color-github: black;
+    --color-github-invert: white;
+
+    --shadow-offset: 2px;
+
+    background: var(--color-background);
+  }
 }
 
 html.theme,

@@ -1,30 +1,27 @@
-import darcula from '../styles/themes/darcula';
-import bright from '../styles/themes/bright';
+export const themes = ['darcula', 'bright'];
 
-const themesStyles = {
-  darcula,
-  bright,
-};
-
-export const themes = Object.keys(themesStyles);
+const defaultTheme = 'darcula';
+let currentTheme = null;
 
 export const applyTheme = (newTheme) => {
-  const prevDocument = document.head.querySelector('.theme');
+  if (currentTheme === newTheme) {
+    return;
+  }
 
-  if (prevDocument) {
+  if (currentTheme) {
     document.documentElement.classList.add('theme');
     document.documentElement.addEventListener('transitionend', () => {
       document.documentElement.classList.remove('theme');
     }, { once: true });
+
+    if (currentTheme !== defaultTheme) {
+      document.documentElement.classList.remove(currentTheme);
+    }
   }
 
-  const documentContainer = document.createElement('style');
-  documentContainer.classList.add('theme');
-
-  documentContainer.innerHTML = themesStyles[newTheme];
-  document.head.appendChild(documentContainer);
-
-  if (prevDocument) {
-    document.head.removeChild(prevDocument);
+  if (newTheme !== defaultTheme) {
+    document.documentElement.classList.add(newTheme);
   }
+
+  currentTheme = newTheme;
 };
