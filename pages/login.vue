@@ -3,7 +3,7 @@
     <div class="bookmark-illu flex">
       <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
     </div>
-    <h2 class="res-subtext special3">Sign in to enjoy Daily's content on your mobile.</h2>
+    <h2 class="res-subtext special3">Sign in to enjoy Daily's content everywhere.</h2>
     <div class="login dialog">
       <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
       <svgicon class="user" name="user"></svgicon>
