@@ -1,5 +1,5 @@
 <template>
-  <section class="container vertical align-center justify-center">
+  <section class="container vertical align-center justify-center" v-fit-height>
     <DaTerminal v-if="error.statusCode === 404">
       <template slot="title">
         yarn watch

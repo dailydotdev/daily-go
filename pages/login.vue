@@ -1,5 +1,5 @@
 <template>
-  <section class="container vertical align-center">
+  <section class="container vertical align-center" v-fit-height>
     <div class="bookmark-illu flex">
       <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
     </div>

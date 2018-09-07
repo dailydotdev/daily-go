@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <div class="empty vertical align-center" v-if="!posts || !posts.length">
+    <div class="empty vertical align-center" v-fit-height v-if="!posts || !posts.length">
       <div class="bookmark-illu flex">
         <img src="~/assets/bookmark_illu_bright.svg" alt="Bookmark illustration" v-if="theme"/>
         <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration" v-else/>
