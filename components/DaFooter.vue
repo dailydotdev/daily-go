@@ -26,7 +26,7 @@
             <div class="pubs">
               <img v-for="pub in publications" :key="pub.id" :src="pub.image" :alt="pub.name"/>
             </div>
-            <div class="text">Customize your feed with:</div>
+            <div class="text">Customize your content with:</div>
             <DaStores></DaStores>
           </section>
           <section class="settings-section">

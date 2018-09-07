@@ -3,15 +3,15 @@
     <div class="bookmark-illu flex">
       <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
     </div>
-    <h2 class="res-subtext special3">Sign in to Daily to get full sync with your bookmarks</h2>
+    <h2 class="res-subtext special3">Sign in to enjoy Daily's content on your mobile.</h2>
     <div class="login dialog">
       <img class="logo" src="~/assets/logo.svg" alt="Daily logo"/>
       <svgicon class="user" name="user"></svgicon>
       <h1 class="massive">Sign in to Daily</h1>
-      <div class="subtext details">It’s exclusive product for developers. Sign in to see all the secret source and enjoy
-        with a
-        lot of content
-        and personal bookmark
+      <div class="subtext details">
+        Once done, all your bookmarks, selected
+        sources and
+        preferences will be synced.
       </div>
       <div class="buttons">
         <a class="github caption" :href="loginGithub" @click="trackLogin('github')">

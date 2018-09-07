@@ -6,10 +6,10 @@
         <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration" v-else/>
       </div>
       <p class="res-subtext primary">
-        Add bookmark on your browser and you’ll see all your articles here.
+        Bookmark your favorite posts in Daily's browser extension to read them here.
       </p>
       <p class="res-subtext primary">
-        If you don’t have Daily extension, you can get it on chrome or firefox.
+        Make sure to install the extension, if you haven't done it yet.
       </p>
       <DaStores></DaStores>
     </div>
