@@ -2,7 +2,8 @@
   <section class="container">
     <div class="empty vertical align-center" v-if="!posts || !posts.length">
       <div class="bookmark-illu flex">
-        <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration"/>
+        <img src="~/assets/bookmark_illu_bright.svg" alt="Bookmark illustration" v-if="theme"/>
+        <img src="~/assets/bookmark_illu.svg" alt="Bookmark illustration" v-else/>
       </div>
       <p class="res-subtext primary">
         Add bookmark on your browser and you’ll see all your articles here.
@@ -43,6 +44,7 @@ import DaInsanePost from '../components/DaInsanePost';
 import DaPost from '../components/DaPost';
 import DaStores from '../components/DaStores';
 import { trackPage } from '../services/analytics';
+import { themes } from '../services/theme';
 
 export default {
   components: {
@@ -81,6 +83,10 @@ export default {
 
       insaneMode(state) {
         return state.ui.insaneMode;
+      },
+
+      theme(state) {
+        return themes.indexOf(state.ui.theme) > 0;
       },
     }),
 
