@@ -14,6 +14,8 @@
       <br>
       <p>
         <slot name="content"></slot>
+        <br>
+        <span class="cursor">&nbsp;</span>
       </p>
     </div>
   </div>
@@ -36,6 +38,12 @@ export default {
 };
 </script>
 <style>
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
 .terminal {
   & .box {
     padding: 2px var(--size-space);
@@ -92,6 +100,11 @@ header {
 
   & .time {
     text-align: right;
+  }
+
+  & .cursor {
+    background: var(--color-primary);
+    animation: blink 1s step-start 0s infinite;
   }
 }
 </style>
