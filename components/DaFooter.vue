@@ -102,6 +102,16 @@ export default {
     }),
   },
 
+  watch: {
+    opened() {
+      if (this.opened) {
+        document.documentElement.classList.add('dialog-open');
+      } else {
+        document.documentElement.classList.remove('dialog-open');
+      }
+    },
+  },
+
   methods: {
     closeProfile() {
       ga('send', 'event', 'Footer', 'Profile', 'Close');
@@ -150,10 +160,16 @@ export default {
     enter(_, done) {
       if (this.opened) {
         this.$nextTick(() => {
-          this.$refs.dialogContainer.classList.add('enter');
+          this.dialogAnim.last();
+          this.profileAnim.last();
+          this.profileAnim.invert();
+          this.dialogAnim.invert();
           setTimeout(() => {
-            this.dialogAnim.play().then(done);
-            this.profileAnim.play();
+            this.$refs.dialogContainer.classList.add('enter');
+            setTimeout(() => {
+              this.dialogAnim.play().then(done);
+              this.profileAnim.play();
+            });
           });
         });
       } else {
@@ -170,10 +186,6 @@ export default {
 
     leave(_, done) {
       if (this.opened) {
-        this.dialogAnim.last();
-        this.profileAnim.last();
-        this.profileAnim.invert();
-        this.dialogAnim.invert();
         done();
       } else {
         this.$refs.dialogContainer.classList.add('leave');

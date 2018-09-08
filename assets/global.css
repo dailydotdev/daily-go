@@ -59,6 +59,10 @@ html.theme * {
   transition: all 0.2s linear;
 }
 
+html.dialog-open body {
+  overflow: hidden;
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
