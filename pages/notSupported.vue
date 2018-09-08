@@ -75,7 +75,7 @@ export default {
         });
     });
 
-    window.addEventListener('mousewheel', (event) => {
+    this.$el.addEventListener('wheel', (event) => {
       const delta = event.deltaY;
       this.$refs.cards.scrollTop = Math.max(0, Math.min(this.$refs.cards.scrollTop - delta, this.$refs.cards.scrollHeight));
       this.$refs.insane.scrollTop = Math.max(0, Math.min(this.$refs.insane.scrollTop + delta, this.$refs.insane.scrollHeight));
