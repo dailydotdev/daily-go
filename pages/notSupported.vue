@@ -44,6 +44,7 @@ import { fetchLatestPosts } from '../services/api';
 import DaInsanePost from '../components/DaInsanePost';
 import DaPost from '../components/DaPost';
 import DaSwitch from '../components/DaSwitch';
+import { trackPage } from '../services/analytics';
 
 export default {
   components: { DaPost, DaInsanePost, DaStores, DaTerminal, DaSwitch },
@@ -56,13 +57,18 @@ export default {
   },
 
   mounted() {
-    import('../icons/bookmark');
+    // Workaround as nuxt currently calls mounted twice
+    this.$nextTick(() => {
+      import('../icons/bookmark');
 
-    fetchLatestPosts(new Date(), 0)
-      .then((posts) => {
-        this.insane = posts.slice(0, 3);
-        this.cards = posts.slice(4, 5);
-      });
+      trackPage('notSupported');
+
+      fetchLatestPosts(new Date(), 0)
+        .then((posts) => {
+          this.insane = posts.slice(0, 3);
+          this.cards = posts.slice(4, 5);
+        });
+    });
   }
 };
 </script>
