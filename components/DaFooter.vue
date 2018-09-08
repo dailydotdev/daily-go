@@ -102,6 +102,16 @@ export default {
     }),
   },
 
+  watch: {
+    opened() {
+      if (this.opened) {
+        document.documentElement.classList.add('dialog-open');
+      } else {
+        document.documentElement.classList.remove('dialog-open');
+      }
+    },
+  },
+
   methods: {
     closeProfile() {
       ga('send', 'event', 'Footer', 'Profile', 'Close');
