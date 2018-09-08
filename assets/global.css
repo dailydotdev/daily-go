@@ -61,9 +61,6 @@ html.theme * {
 
 html.dialog-open body {
   overflow: hidden;
-  position: fixed;
-  width: 100%;
-  height: 100%;
 }
 
 * {
