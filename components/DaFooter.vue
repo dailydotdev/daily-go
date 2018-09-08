@@ -50,7 +50,6 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import { FLIP, FLP } from '../services/flip';
 import DaStores from './DaStores';
 import { themes } from '../services/theme';
-import '../services/rIC';
 
 export default {
   name: 'DaFooter',
@@ -160,8 +159,8 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
-        requestIdleCallback(() => {
-          this.$refs.dialogContainer.classList.add('enter');
+        this.$refs.dialogContainer.classList.add('enter');
+        setTimeout(() => {
           this.dialogAnim.play().then(done);
           this.profileAnim.play();
         });
