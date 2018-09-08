@@ -160,13 +160,11 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
-        this.$nextTick(() => {
-          requestIdleCallback(() => {
-            this.$refs.dialogContainer.classList.add('enter');
-            setTimeout(() => {
-              this.dialogAnim.play().then(done);
-              this.profileAnim.play();
-            });
+        requestIdleCallback(() => {
+          this.$refs.dialogContainer.classList.add('enter');
+          setTimeout(() => {
+            this.dialogAnim.play().then(done);
+            this.profileAnim.play();
           });
         });
       } else {
