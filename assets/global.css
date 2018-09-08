@@ -59,6 +59,7 @@ html.theme * {
   transition: all 0.2s linear;
 }
 
+html.dialog-open,
 html.dialog-open body {
   overflow: hidden;
 }
