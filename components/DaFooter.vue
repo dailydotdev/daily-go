@@ -162,10 +162,8 @@ export default {
       if (this.opened) {
         requestIdleCallback(() => {
           this.$refs.dialogContainer.classList.add('enter');
-          setTimeout(() => {
-            this.dialogAnim.play().then(done);
-            this.profileAnim.play();
-          });
+          this.dialogAnim.play().then(done);
+          this.profileAnim.play();
         });
       } else {
         done();
