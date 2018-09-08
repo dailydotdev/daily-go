@@ -52,6 +52,8 @@ import { trackPage } from '../services/analytics';
 export default {
   components: { DaPost, DaInsanePost, DaStores, DaTerminal, DaSwitch },
 
+  middleware: 'supported',
+
   data() {
     return {
       insane: [],
