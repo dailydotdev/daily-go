@@ -38,6 +38,12 @@ export const fetchPublications = () =>
   fetch(`${apiUrl}/v1/publications`, { credentials: 'include' })
     .then(response => response.json());
 
+export const fetchLatestPosts = (latest, page) =>
+  fetch(`${apiUrl}/v1/posts/latest?latest=${latest.toISOString()}&page=${page}&pageSize=${pageSize}`,
+    { credentials: 'include' })
+    .then(response => response.json())
+    .then(posts => posts.map(mapPost));
+
 export const fetchBookmarks = (latest, page, accessToken) =>
   fetch(`${apiUrl}/v1/posts/bookmarks?latest=${latest.toISOString()}&page=${page}&pageSize=${pageSize}`,
     {

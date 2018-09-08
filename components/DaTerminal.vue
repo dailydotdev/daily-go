@@ -10,8 +10,8 @@
       </div>
     </header>
     <div class="content flex subtext primary">
-      <div class="comment time">{{ time }}</div>
-      <br>
+      <div class="comment time" v-if="showTimestamp">{{ time }}</div>
+      <br v-if="showTimestamp">
       <p>
         <slot name="content"></slot>
         <br>
@@ -24,6 +24,13 @@
 <script>
 export default {
   name: 'DaTerminal',
+
+  props: {
+    showTimestamp: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   data() {
     return {
@@ -47,15 +54,34 @@ export default {
 .terminal {
   & .box {
     padding: 2px var(--size-space);
+    text-transform: uppercase;
 
     &.red {
       background: #CA4151;
+      color: var(--color-github-invert);
+    }
+
+    &.green {
+      background: var(--color-special4);
+      color: var(--color-github-invert);
+    }
+
+    &.comment {
+      background: var(--color-comment);
       color: var(--color-github-invert);
     }
   }
 
   & .red {
     color: #CA4151;
+  }
+
+  & .green {
+    color: var(--color-special4);
+  }
+
+  & strong {
+    font-weight: bold;
   }
 }
 </style>
@@ -93,6 +119,7 @@ header {
 
 .content {
   padding: calc(var(--size-space) * 2);
+  overflow: auto;
   background: var(--color-github-invert);
   border-radius: 0 0 var(--size-space) var(--size-space);
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
