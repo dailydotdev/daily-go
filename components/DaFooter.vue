@@ -160,9 +160,9 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
-        requestIdleCallback(() => {
-          this.$refs.dialogContainer.classList.add('enter');
-          setTimeout(() => {
+        this.$nextTick(() => {
+          requestIdleCallback(() => {
+            this.$refs.dialogContainer.classList.add('enter');
             this.dialogAnim.play().then(done);
             this.profileAnim.play();
           });
