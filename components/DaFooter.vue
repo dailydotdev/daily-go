@@ -159,10 +159,12 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
-        this.$refs.dialogContainer.classList.add('enter');
         setTimeout(() => {
-          this.dialogAnim.play().then(done);
-          this.profileAnim.play();
+          this.$refs.dialogContainer.classList.add('enter');
+          setTimeout(() => {
+            this.dialogAnim.play().then(done);
+            this.profileAnim.play();
+          });
         });
       } else {
         done();
