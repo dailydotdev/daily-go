@@ -159,6 +159,10 @@ export default {
 
     enter(_, done) {
       if (this.opened) {
+        this.dialogAnim.last();
+        this.profileAnim.last();
+        this.profileAnim.invert();
+        this.dialogAnim.invert();
         setTimeout(() => {
           this.$refs.dialogContainer.classList.add('enter');
           setTimeout(() => {
@@ -180,10 +184,6 @@ export default {
 
     leave(_, done) {
       if (this.opened) {
-        this.dialogAnim.last();
-        this.profileAnim.last();
-        this.profileAnim.invert();
-        this.dialogAnim.invert();
         done();
       } else {
         this.$refs.dialogContainer.classList.add('leave');
