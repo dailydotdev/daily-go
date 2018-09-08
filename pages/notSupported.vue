@@ -23,17 +23,20 @@
       </p>
       <DaStores></DaStores>
     </div>
-    <div class="insane">
+    <div class="insane" ref="insane">
       <DaInsanePost v-for="item in insane" :key="item.id" :post-id="item.id" :link="item.url"
                     :title="item.title" :source="item.publication.name"
                     :logo="item.publication.image"></DaInsanePost>
     </div>
-    <div class="cards">
+    <div class="cards" ref="cards">
       <DaPost v-for="item in cards" :key="item.id" :post-id="item.id" :link="item.url"
               :img="item.image" :title="item.title" :source="item.publication.name"
               :logo="item.publication.image" :size="item.size" :placeholder="item.placeholder"></DaPost>
     </div>
     <DaSwitch icon="bookmark" :checked="true"></DaSwitch>
+    <div class="footer">
+      <img src="~/assets/ido.jpeg" alt="Profile image"/>
+    </div>
   </section>
 </template>
 
@@ -65,9 +68,15 @@ export default {
 
       fetchLatestPosts(new Date(), 0)
         .then((posts) => {
-          this.insane = posts.slice(0, 3);
-          this.cards = posts.slice(4, 5);
+          this.insane = posts.slice(0, posts.length * 2 / 3);
+          this.cards = posts.slice(posts.length * 2 / 3, posts.length);
         });
+    });
+
+    window.addEventListener('mousewheel', (event) => {
+      const delta = event.deltaY;
+      this.$refs.cards.scrollTop = Math.max(0, Math.min(this.$refs.cards.scrollTop - delta, this.$refs.cards.scrollHeight));
+      this.$refs.insane.scrollTop = Math.max(0, Math.min(this.$refs.insane.scrollTop + delta, this.$refs.insane.scrollHeight));
     });
   }
 };
@@ -86,7 +95,12 @@ export default {
 }
 
 .content {
-  width: 390px;
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  background: var(--color-background);
+  padding: 24px 0;
+  z-index: 100;
 
   & > * {
     margin: 12px 0;
@@ -122,22 +136,49 @@ export default {
 .insane {
   position: absolute;
   right: 0;
-  bottom: -50px;
+  top: 73%;
   width: 330px;
+  height: 290px;
+  overflow: hidden;
   background: var(--color-background-highlight);
   border-radius: var(--size-space);
 }
 
 .cards {
   position: absolute;
-  top: -200px;
+  bottom: 80%;
   left: 60px;
   width: 330px;
+  height: 330px;
+  overflow: hidden;
 }
 
 .switch {
   position: absolute;
-  bottom: 10%;
-  left: 40%;
+  bottom: 12%;
+  left: 50%;
+}
+
+.footer {
+  position: absolute;
+  display: flex;
+  left: 3%;
+  bottom: 5%;
+  width: 500px;
+  height: 120px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--size-space) * 3);
+  border-radius: 16px 16px 0 0;
+  background: var(--color-background-highlight);
+  box-shadow: 0 -1px 0 0 var(--color-background), 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
+
+  & img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
 }
 </style>
