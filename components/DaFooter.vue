@@ -163,8 +163,10 @@ export default {
         this.$nextTick(() => {
           requestIdleCallback(() => {
             this.$refs.dialogContainer.classList.add('enter');
-            this.dialogAnim.play().then(done);
-            this.profileAnim.play();
+            setTimeout(() => {
+              this.dialogAnim.play().then(done);
+              this.profileAnim.play();
+            });
           });
         });
       } else {
