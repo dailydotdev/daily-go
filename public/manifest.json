@@ -1,0 +1,21 @@
+{
+  "name": "Daily",
+  "short_name": "Daily",
+  "description": "Daily is a developer productivity tool that curates the latest dev & coding news and delivers it to your new tab on Chrome and Firefox.",
+  "icons": [
+    {
+      "src": "/img/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/?pwa=true",
+  "display": "standalone",
+  "background_color": "#4D96F1",
+  "theme_color": "#393C3E"
+}

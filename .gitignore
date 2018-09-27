@@ -1,21 +1,23 @@
-# dependencies
+.DS_Store
 node_modules
+/dist
 
-# logs
-npm-debug.log
+src/icons
 
-# Nuxt build
-.nuxt
+# local env files
+.env.local
+.env.*.local
 
-# Nuxt generate
-dist
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# IDE
+# Editor directories and files
 .idea
-
-sw.*
-
-local.sh
-prod.sh
-
-icons/
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
