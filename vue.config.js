@@ -74,7 +74,7 @@ module.exports = {
         },
         {
           // eslint-disable-next-line
-          urlPattern: new RegExp('^/.*'),
+          urlPattern: new RegExp('/.*'),
           method: 'GET',
           handler: 'networkFirst',
         },
