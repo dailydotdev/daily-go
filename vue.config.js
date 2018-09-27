@@ -22,8 +22,6 @@ module.exports = {
     },
     workboxOptions: {
       exclude: [/_redirects$/],
-      clientsClaim: true,
-      skipWaiting: true,
       runtimeCaching: [
         {
           // eslint-disable-next-line no-useless-escape

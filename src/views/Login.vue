@@ -1,13 +1,15 @@
 <template>
   <section
-    class="container vertical align-center"
+    class="container vertical"
     v-fit-height>
-    <div class="bookmark-illu flex">
-      <img
-        src="../assets/bookmark_illu.svg"
-        alt="Bookmark illustration">
+    <div class="vertical flex align-center justify-center">
+      <div class="bookmark-illu flex">
+        <img
+          src="../assets/bookmark_illu.svg"
+          alt="Bookmark illustration">
+      </div>
+      <h2 class="res-subtext special3">Sign in to enjoy Daily's content everywhere.</h2>
     </div>
-    <h2 class="res-subtext special3">Sign in to enjoy Daily's content everywhere.</h2>
     <div class="login dialog">
       <img
         class="logo"
