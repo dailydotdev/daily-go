@@ -72,6 +72,12 @@ module.exports = {
           method: 'GET',
           handler: 'cacheFirst',
         },
+        {
+          // eslint-disable-next-line
+          urlPattern: new RegExp('^/\.*'),
+          method: 'GET',
+          handler: 'networkFirst',
+        },
       ],
     },
   },
