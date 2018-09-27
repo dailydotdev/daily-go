@@ -63,18 +63,18 @@ module.exports = {
           handler: 'cacheFirst',
         },
         {
-          urlPattern: 'https://ajax.googleapis.com/ajax/libs/webfont/*',
+          urlPattern: new RegExp('https://ajax.googleapis.com/ajax/libs/webfont/.*'),
           method: 'GET',
           handler: 'cacheFirst',
         },
         {
-          urlPattern: 'https://storage.googleapis.com/devkit-assets/static/*',
+          urlPattern: new RegExp('https://storage.googleapis.com/devkit-assets/static/.*'),
           method: 'GET',
           handler: 'cacheFirst',
         },
         {
           // eslint-disable-next-line
-          urlPattern: new RegExp('^/\.*'),
+          urlPattern: new RegExp('^/.*'),
           method: 'GET',
           handler: 'networkFirst',
         },
