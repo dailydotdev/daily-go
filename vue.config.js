@@ -21,6 +21,7 @@ module.exports = {
       msTileImage: 'img/icons/icon-144x144.png',
     },
     workboxOptions: {
+      exclude: [/_redirects$/],
       clientsClaim: true,
       skipWaiting: true,
       runtimeCaching: [

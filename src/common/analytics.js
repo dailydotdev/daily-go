@@ -1,4 +1,5 @@
 import 'mixpanel-browser/mixpanel-jslib-snippet.min';
+import '../common/rIC';
 import { fetchUserId } from './api';
 
 /* eslint-disable */
@@ -8,11 +9,13 @@ import { fetchUserId } from './api';
     (i[r].q = i[r].q || []).push(arguments);
   }, i[r].l = 1 * new Date();
 
-  a = s.createElement(o),
-    m = s.getElementsByTagName(o)[0];
-  a.async = 1;
-  a.src = g;
-  m.parentNode.insertBefore(a, m);
+  requestIdleCallback(() => {
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  });
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 /* eslint-enable */
 
