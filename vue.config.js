@@ -38,7 +38,7 @@ module.exports = {
         },
         {
           // eslint-disable-next-line no-useless-escape
-          urlPattern: new RegExp('^https:\/\/(storage\.googleapis\.com\/devkit-assets\/ads|res\.cloudinary\.com\/daily-now\/image\/upload\/.*\/v1\/ads)\/.*'),
+          urlPattern: new RegExp('^https://(storage\.googleapis\.com\/devkit-assets\/ads|res\.cloudinary\.com/daily-now/image/upload/.*/v1/ads)/.*'),
           method: 'GET',
           handler: 'cacheFirst',
           options: {
@@ -51,7 +51,7 @@ module.exports = {
         },
         {
           // eslint-disable-next-line no-useless-escape
-          urlPattern: new RegExp('^https:\/\/res\.cloudinary\.com\/daily-now\/image\/upload\/.*\/v1\/logos\/.*'),
+          urlPattern: new RegExp('^https://res\.cloudinary\.com/daily-now/image/upload/.*/v1/logos/.*'),
           method: 'GET',
           handler: 'cacheFirst',
           options: {
