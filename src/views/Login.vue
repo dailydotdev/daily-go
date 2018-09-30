@@ -1,48 +1,35 @@
 <template>
-  <section
-    class="container vertical"
-    v-fit-height>
-    <div class="vertical flex align-center justify-center">
-      <div class="bookmark-illu flex">
-        <img
-          src="../assets/bookmark_illu.svg"
-          alt="Bookmark illustration">
-      </div>
-      <h2 class="res-subtext special3">Sign in to enjoy Daily's content everywhere.</h2>
+  <div class="login dialog">
+    <img
+      class="logo"
+      src="../assets/logo.svg"
+      alt="Daily logo">
+    <svgicon
+      class="user"
+      name="user"/>
+    <h1 class="massive">Daily Go is here!</h1>
+    <div class="subtext details">
+      Sign in to start using Daily Go exclusively on your mobile and tablet.
+      Getting the best curate dev news on the go was never so easy.
     </div>
-    <div class="login dialog">
-      <img
-        class="logo"
-        src="../assets/logo.svg"
-        alt="Daily logo">
-      <svgicon
-        class="user"
-        name="user"/>
-      <h1 class="massive">Sign in to Daily</h1>
-      <div class="subtext details">
-        Once done, all your bookmarks, selected
-        sources and
-        preferences will be synced.
-      </div>
-      <div class="buttons">
-        <a
-          class="github caption"
-          :href="loginGithub"
-          @click="trackLogin('github')">
-          <svgicon name="github"/>
-          <span>Sign in with GitHub</span>
-        </a>
-        <div class="or subtext">or</div>
-        <a
-          class="google"
-          :href="loginGoogle"
-          title="Sign in with Google"
-          @click="trackLogin('google')">
-          <svgicon name="google"/>
-        </a>
-      </div>
+    <div class="buttons">
+      <a
+        class="github caption"
+        :href="loginGithub"
+        @click="trackLogin('github')">
+        <svgicon name="github"/>
+        <span>Sign in with GitHub</span>
+      </a>
+      <div class="or subtext">or</div>
+      <a
+        class="google"
+        :href="loginGoogle"
+        title="Sign in with Google"
+        @click="trackLogin('google')">
+        <svgicon name="google"/>
+      </a>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -80,22 +67,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  position: relative;
-  height: 100vh;
-}
-
-.bookmark-illu {
-  margin: calc(var(--size-space) * 3) 0 calc(var(--size-space) / 2);
-}
-
-h2 {
-  margin: calc(var(--size-space) * 2) calc(var(--size-space) * 4);
-  text-align: center;
-}
-
 .login {
-  position: relative;
   display: flex;
   height: 337px;
   align-self: stretch;
@@ -199,19 +171,6 @@ h2 {
 }
 
 @media (--mobile-m) {
-  .illu {
-    margin-top: 55px;
-    margin-bottom: 0;
-    flex: 2;
-  }
-
-  h2 {
-    display: flex;
-    margin: 0 calc(var(--size-space) * 3);
-    align-items: center;
-    flex: 1;
-  }
-
   .login {
     height: 387px;
 

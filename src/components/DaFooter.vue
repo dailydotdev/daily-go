@@ -7,6 +7,7 @@
       @leave="leave"
       :css="false">
       <footer
+        class="limit-width"
         v-if="!opened"
         ref="footer">
         <button
@@ -266,7 +267,6 @@ export default {
 footer {
   position: fixed;
   display: flex;
-  left: 0;
   bottom: 0;
   width: 100%;
   height: var(--size-footer);

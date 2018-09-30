@@ -16,10 +16,11 @@
             v-else>
         </div>
         <p class="res-subtext primary">
-          Bookmark your favorite posts in Daily's browser extension to read them here.
+          Bookmark articles on Daily Go or on Daily browser extension and you'll see it here.
         </p>
         <p class="res-subtext primary">
-          Make sure to install the extension, if you haven't done it yet.
+          Don't have Daily browser extensions yet?<br>
+          Make sure to get it here:
         </p>
         <DaStores/>
       </div>
@@ -48,8 +49,10 @@
             :bookmarked="item.bookmarked"
             @toggle-bookmark="toggleBookmark({id: $event, bookmarked: !item.bookmarked})"/>
         </div>
-        <div
+        <masonry
           class="cards"
+          :cols="cols"
+          :gutter="32"
           v-else>
           <DaPost
             v-for="item in posts"
@@ -64,13 +67,14 @@
             :placeholder="item.placeholder"
             :bookmarked="item.bookmarked"
             @toggle-bookmark="toggleBookmark({id: $event, bookmarked: !item.bookmarked})"/>
-        </div>
+        </masonry>
         <div
           id="anchor"
           ref="anchor"/>
       </div>
     </section>
     <DaFooter/>
+    <router-view/>
     <transition name="fade">
       <div
         class="dialog-container congrats"
@@ -87,8 +91,8 @@
             alt="Confetti">
           <h1 class="massive">Congratulations!</h1>
           <p class="text primary">
-            Welcome to our community!
-            We value each new member and we hope you will enjoy the upcoming features…
+            Welcome to Daily Go!
+            We value every member in our community and we trust you to use Daily Go responsibly....
           </p>
           <button
             class="text"
@@ -127,6 +131,10 @@ export default {
   data() {
     return {
       observing: false,
+      cols: {
+        default: 2,
+        700: 1,
+      },
     };
   },
 
@@ -227,6 +235,13 @@ export default {
 </style>
 
 <style scoped>
+@import '../styles/custom.pcss';
+
+.container {
+  max-width: 672px;
+  margin: 0 auto;
+}
+
 .congrats .dialog {
   display: flex;
   flex-direction: column;
@@ -338,15 +353,12 @@ export default {
 }
 
 .cards {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  width: 100%;
-  max-width: 330px;
+  margin: calc(var(--size-space) * -3) 0;
+}
 
-  & .card {
-    margin: 10px 0;
-  }
+.card {
+  box-sizing: border-box;
+  margin: calc(var(--size-gap) * 2) 0;
 }
 
 #anchor {
@@ -367,6 +379,22 @@ export default {
     & p {
       font-size: 18px;
       line-height: 24px;
+    }
+  }
+}
+
+@media (--tablet) {
+  .feed {
+    margin: calc(var(--size-space) * 6) 0;
+
+    & > * {
+      margin-top: calc(var(--size-space) * 2);
+      margin-bottom: calc(var(--size-space) * 2);
+
+      &.cards {
+        margin-top: calc(var(--size-space) * -2);
+        margin-bottom: calc(var(--size-space) * -2);
+      }
     }
   }
 }

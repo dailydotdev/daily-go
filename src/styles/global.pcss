@@ -149,9 +149,18 @@ button {
 }
 
 .dialog {
+  position: fixed;
+  bottom: 0;
   background: var(--color-background-highlight);
   border-radius: calc(var(--size-space) * 2) calc(var(--size-space) * 2) 0 0;
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
+}
+
+.dialog, .limit-width {
+  left: 0;
+  right: 0;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .bookmark-illu {
@@ -191,15 +200,8 @@ button {
   }
 
   & .dialog {
-    position: absolute;
-    left: 0;
-    bottom: 0;
     width: 100%;
     max-height: 100vh;
     overflow: auto;
   }
-}
-
-#__nuxt .spinner {
-  width: 80px;
 }
