@@ -11,7 +11,7 @@ module.exports = {
     },
   },
   pwa: {
-    name: 'Daily',
+    name: 'Daily Go',
     themeColor: '#393C3E',
     msTileColor: '#393C3E',
     iconPaths: {

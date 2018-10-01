@@ -1,6 +1,6 @@
 {
-  "name": "Daily",
-  "short_name": "Daily",
+  "name": "Daily Go",
+  "short_name": "Daily Go",
   "description": "Daily is a developer productivity tool that curates the latest dev & coding news and delivers it to your new tab on Chrome and Firefox.",
   "icons": [
     {
