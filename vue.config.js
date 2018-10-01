@@ -11,6 +11,7 @@ module.exports = {
       },
     },
   },
+  productionSourceMap: false,
   pwa: {
     name: 'Daily Go',
     themeColor: '#393C3E',
