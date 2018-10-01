@@ -18,7 +18,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       const { params, query } = to;
-
       return exchangeCode(params.provider, query)
         .then((profile) => {
           ga('send', 'event', 'Login', 'Done', params.provider);
@@ -26,7 +25,11 @@ export default {
 
           updateId(profile.id);
           vm.$store.commit('user/updateProfile', profile);
-          vm.$router.replace('/');
+          if (query.to) {
+            vm.$router.replace(query.to);
+          } else {
+            vm.$router.replace('/');
+          }
         })
         .catch(() => {
           ga('send', 'event', 'Login', 'Failed', params.provider);

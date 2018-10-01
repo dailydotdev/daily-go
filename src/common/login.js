@@ -1,7 +1,8 @@
 import { apiUrl } from './config';
 
-export const getLoginLink = (provider) => {
-  const redirectUri = `${window.location.origin}/oauth/${provider}/callback`;
+export const getLoginLink = (provider, redirectTo) => {
+  const suffix = redirectTo ? `?to=${redirectTo}` : '';
+  const redirectUri = `${window.location.origin}/oauth/${provider}/callback${suffix}`;
   return `${apiUrl}/v1/auth/${provider}/authorize?redirect_uri=${encodeURI(redirectUri)}`;
 };
 

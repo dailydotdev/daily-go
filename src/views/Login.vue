@@ -44,8 +44,8 @@ export default {
 
   data() {
     return {
-      loginGithub: getLoginLink('github'),
-      loginGoogle: getLoginLink('google'),
+      loginGithub: getLoginLink('github', this.$route.query.from),
+      loginGoogle: getLoginLink('google', this.$route.query.from),
     };
   },
 
