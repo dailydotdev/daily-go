@@ -102,6 +102,7 @@ export default {
       loading: false,
       ended: false,
       latest: new Date(),
+      lastInterval: new Date(),
     };
   },
 
@@ -229,13 +230,17 @@ export default {
     this.fetchPage()
       .then(() => {
         if (this.posts.length) {
-          this.startTimer();
+          this.timerInterval = setInterval(() => this.onInterval(), 100);
         }
       });
   },
 
   destroyed() {
-    this.stopTimer();
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
     document.removeEventListener('visibilitychange', this.visibilityChangeCallback);
     this.hammer.destroy();
   },
@@ -261,21 +266,13 @@ export default {
     },
 
     startTimer() {
-      this.$refs.timerProgress.classList.add('reset');
       this.elapsed = 0;
-
-      setTimeout(() => {
-        this.lastInterval = new Date();
-        this.timerInterval = setInterval(() => this.onInterval(), 200);
-        this.$refs.timerProgress.classList.remove('reset');
-      }, 100);
+      this.lastInterval = new Date();
+      this.pauseTimer = false;
     },
 
     stopTimer() {
-      if (this.timerInterval) {
-        clearInterval(this.timerInterval);
-        this.timerInterval = null;
-      }
+      this.pauseTimer = true;
     },
 
     prevPost() {
@@ -515,10 +512,6 @@ header {
   border-radius: 100px;
   background: var(--color-highlight);
   transition: width 0.2s linear;
-
-  &.reset {
-    transition: none;
-  }
 }
 
 .logo {
