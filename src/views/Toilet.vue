@@ -223,9 +223,11 @@ export default {
     });
 
     this.visibilityChangeCallback = () => {
-      this.pauseTimer = document.hidden;
+      this.pauseTimer = !document.hasFocus();
     };
-    document.addEventListener('visibilitychange', this.visibilityChangeCallback, false);
+    document.addEventListener('visibilitychange', this.visibilityChangeCallback);
+    window.addEventListener('focus', this.visibilityChangeCallback);
+    window.addEventListener('blur', this.visibilityChangeCallback);
 
     this.fetchPage()
       .then(() => {
@@ -242,6 +244,8 @@ export default {
     }
 
     document.removeEventListener('visibilitychange', this.visibilityChangeCallback);
+    window.removeEventListener('focus', this.visibilityChangeCallback);
+    window.removeEventListener('blur', this.visibilityChangeCallback);
     this.hammer.destroy();
   },
 
