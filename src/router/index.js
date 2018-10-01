@@ -12,6 +12,12 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+      children: [
+        {
+          path: '/toilet',
+          component: () => import(/* webpackChunkName: "toilet" */ '../views/Toilet.vue'),
+        },
+      ],
     },
     {
       path: '/login',

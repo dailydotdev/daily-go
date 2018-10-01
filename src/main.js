@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import svgicon from 'vue-svgicon';
 import VueMasonry from 'vue-masonry-css';
+import VueVisible from 'vue-visible';
 
 import App from './App.vue';
 import router from './router';
@@ -13,6 +14,7 @@ Vue.config.productionTip = false;
 
 Vue.use(svgicon);
 Vue.use(VueMasonry);
+Vue.use(VueVisible);
 
 const setHeight = (el) => {
   // eslint-disable-next-line no-param-reassign

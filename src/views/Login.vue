@@ -67,6 +67,8 @@ export default {
 </script>
 
 <style scoped>
+@import '../styles/custom.pcss';
+
 .login {
   display: flex;
   height: 337px;

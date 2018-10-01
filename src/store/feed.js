@@ -73,14 +73,12 @@ export default {
       state.bookmarks = state.bookmarks.concat(bookmarks);
     },
 
-    toggleBookmark(state, { id, bookmarked }) {
-      // const postIndex = setPostBookmark(state, id, bookmarked);
-
+    toggleBookmark(state, { id, bookmarked, post }) {
       if (!bookmarked) {
         const index = state.bookmarks.findIndex(bookmark => bookmark.id === id);
         state.bookmarks.splice(index, 1);
       } else {
-        // state.bookmarks.unshift(state.posts[postIndex]);
+        state.bookmarks.unshift(post);
       }
     },
   },

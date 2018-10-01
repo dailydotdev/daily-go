@@ -264,6 +264,8 @@ export default {
 </script>
 
 <style scoped>
+@import '../styles/custom.pcss';
+
 footer {
   position: fixed;
   display: flex;
@@ -491,6 +493,12 @@ button {
       --da-switch-height: 24px;
       --da-switch-slider-height: 16px;
     }
+  }
+}
+
+@media (--tablet) {
+  footer {
+    box-shadow: 0 -1px 0 0 #262626, 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
   }
 }
 </style>
