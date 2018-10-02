@@ -196,9 +196,11 @@ export default {
     trackPage('toilet');
 
     this.hammer = new Hammer(this.$refs.container);
-    this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_UP });
+    this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
     this.hammer.get('press').set({ time: 150 });
     this.hammer.on('swipeup', () => this.openPost());
+    this.hammer.on('swipeleft', () => this.nextPost());
+    this.hammer.on('swiperight', () => this.prevPost());
     this.hammer.on('press', (e) => {
       e.preventDefault();
       this.pauseTimer = true;
