@@ -269,6 +269,11 @@ export default {
 
       this.loading = false;
       this.posts = this.posts.concat(newPosts);
+
+      newPosts.forEach((post) => {
+        const image = new Image();
+        image.src = post.image;
+      });
     },
 
     startTimer() {
