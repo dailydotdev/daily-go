@@ -25,15 +25,15 @@ const isPwa = window.location.search.indexOf('pwa=true') > -1;
 
 mixpanel.init(process.env.VUE_APP_MIXPANEL);
 mixpanel.register({
-  source: 'app',
+  source: 'go',
   pwa: isPwa,
 });
 
 export const trackPage = (page) => {
   const suffix = isPwa ? '?pwa=true' : '';
-  ga('set', 'page', `/app/${page}${suffix}`);
+  ga('set', 'page', `/go/${page}${suffix}`);
   ga('send', 'pageview');
-  mixpanel.track(`App ${page.replace(/^\w/, c => c.toUpperCase())}`);
+  mixpanel.track(`Go ${page.replace(/^\w/, c => c.toUpperCase())}`);
 };
 
 export const updateId = (id) => {
