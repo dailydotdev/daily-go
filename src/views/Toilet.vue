@@ -3,92 +3,71 @@
     <div tabindex="0"/>
     <div
       class="dialog"
-      :class="{ bookmarked }"
       role="dialog"
       ref="container"
       aria-modal="true">
-      <transition :name="transition">
+      <div
+        class="wrapper"
+        ref="wrapper">
+        <DaToiletItem
+          :post="prevPost"
+          ref="prevPost"
+          :enable-next="false"
+          :enable-prev="false"
+          :duration="duration"
+          :pause-timer="true"
+          v-if="prevPost !== null"
+          v-show="panMode === 0"/>
+        <DaToiletItem
+          :post="post"
+          ref="post"
+          :enable-next="enableNext"
+          :enable-prev="enablePrev"
+          :duration="duration"
+          :pause-timer="pauseTimer"
+          v-if="post !== null"/>
+        <DaToiletItem
+          :post="nextPost"
+          ref="nextPost"
+          :enable-next="false"
+          :enable-prev="false"
+          :duration="duration"
+          :pause-timer="true"
+          v-if="nextPost !== null"
+          v-show="panMode === 2"/>
         <div
-          class="post vertical"
-          :key="currentIndex">
-          <img
-            class="background"
-            :src="image"
-            v-show="image.length > 0">
-          <header class="vertical">
-            <div class="timer">
-              <div
-                class="timer-progress"
-                ref="timerProgress"
-                :style="{width: timerProgress}"/>
-            </div>
-            <div class="horizontal align-center">
-              <img
-                class="logo"
-                :src="logo"
-                :alt="source"
-                v-show="type === 'post'">
-              <h4 class="caption comment">{{ subheader }}</h4>
-              <router-link
-                to="/"
-                class="back align-right">
-                <svgicon name="x"/>
-              </router-link>
-            </div>
-          </header>
+          class="reveal jumbo horizontal align-center justify-center"
+          ref="reveal">
+          <div>Enjoy!</div>
           <div
-            class="content horizontal align-center flex"
-            ref="touch">
-            <svgicon
-              name="up"
-              class="show-on-tablet left"
-              v-visible="enablePrev"/>
-            <h1 class="jumbo flex">{{ title | cardTitle }}</h1>
-            <svgicon
-              name="up"
-              class="show-on-tablet right"
-              v-visible="enableNext"/>
+            class="emoji"
+            ref="emoji">
+            &#x1F913;
           </div>
-          <footer class="horizontal align-center">
-            <a
-              :href="link"
-              target="_blank"
-              class="horizontal align-center"
-              @click.prevent="openPost">
-              <svgicon
-                name="up"
-                class="hide-on-tablet"/>
-              <svgicon
-                name="link"
-                class="show-on-tablet"/>
-              <span class="subtext">Open Article</span>
-            </a>
-            <button
-              class="bookmark align-right"
-              @click.prevent="onBookmark"
-              v-show="type === 'post'">
-              <svgicon name="bookmark"/>
-            </button>
-          </footer>
         </div>
-      </transition>
+      </div>
     </div>
-    <img
-      v-for="(item, index) in pixel"
-      :key="index"
-      :src="item"
-      class="pixel">
   </div>
 </template>
 
 <script>
-import Hammer from 'hammerjs';
 import { mapState, mapMutations } from 'vuex';
+import 'gsap/CSSPlugin';
+import TweenLite, { Power0 } from 'gsap/TweenLite';
+import TimelineLite from 'gsap/TimelineLite';
+import TouchHandler from '../common/touch';
 import { fetchToilet } from '../common/api';
 import { trackPage } from '../common/analytics';
+import DaToiletItem from '../components/DaToiletItem.vue';
+
+const calcProgress = (value, max) => Math.min(1, Math.max(0, value / max));
 
 export default {
   name: 'Toilet',
+
+  components: {
+    DaToiletItem,
+  },
 
   data() {
     return {
@@ -103,6 +82,7 @@ export default {
       ended: false,
       latest: new Date(),
       lastInterval: new Date(),
+      panMode: null,
     };
   },
 
@@ -113,63 +93,16 @@ export default {
       },
     }),
 
-    currentPost() {
+    prevPost() {
+      return this.currentIndex === 0 ? null : this.posts[this.currentIndex - 1];
+    },
+
+    post() {
       return this.currentIndex >= this.posts.length ? null : this.posts[this.currentIndex];
     },
 
-    timerProgress() {
-      return `${(this.elapsed * 100) / this.duration}%`;
-    },
-
-    image() {
-      return this.currentPost ? this.currentPost.image : '';
-    },
-
-    logo() {
-      return this.type === 'post' ? this.currentPost.publication.image : '';
-    },
-
-    source() {
-      return this.type === 'post' ? this.currentPost.publication.name : '';
-    },
-
-    title() {
-      if (this.type === 'post') {
-        return this.currentPost.title;
-      } else if (this.type === 'ad') {
-        return this.currentPost.description;
-      }
-      return '';
-    },
-
-    link() {
-      if (this.type === 'post') {
-        return this.currentPost.url;
-      } else if (this.type === 'ad') {
-        return this.currentPost.link;
-      }
-      return '';
-    },
-
-    pixel() {
-      return this.type === 'ad' ? this.currentPost.pixel : [];
-    },
-
-    type() {
-      return this.currentPost ? this.currentPost.type : '';
-    },
-
-    bookmarked() {
-      return this.currentPost ? this.currentPost.bookmarked : false;
-    },
-
-    subheader() {
-      if (this.type === 'post') {
-        return `// ${this.source}`;
-      } else if (this.type === 'ad') {
-        return '/# PROMOTED #/';
-      }
-      return '';
+    nextPost() {
+      return this.currentIndex + 1 >= this.posts.length ? null : this.posts[this.currentIndex + 1];
     },
 
     enablePrev() {
@@ -181,48 +114,257 @@ export default {
     },
   },
 
-  watch: {
-    type() {
-      if (this.type === 'ad') {
-        ga('send', 'event', 'Ad', 'Impression', this.source);
+  created() {
+    this.killTween = () => {
+      if (this.tween) {
+        this.tween.progress(0);
+        this.tween.kill();
+        this.tween = null;
       }
-    },
+    };
+
+    this.createUpTween = (yThresh) => {
+      const duration = 200;
+
+      const tweenWrapper = TweenLite.to(
+        this.$refs.wrapper,
+        duration / 1000,
+        { yPercent: yThresh * -100, ease: Power0.easeNone },
+      );
+
+      const tweenReveal = TweenLite.to(
+        this.$refs.reveal,
+        duration / 1000,
+        { opacity: 1 },
+      );
+
+      const tween = new TimelineLite();
+      tween.add([tweenWrapper, tweenReveal], 0);
+      tween.pause();
+      return tween;
+    };
+
+    this.createHorizontalTween = (dir) => {
+      const duration = 500;
+      const halfDurationSec = (duration / 2) / 1000;
+
+      const tweenPost1 = TweenLite.to(
+        this.$refs.post.$el,
+        halfDurationSec,
+        {
+          xPercent: 50 * dir,
+          z: -200,
+          rotationY: 45 * dir,
+          transformOrigin: `${dir > 0 ? '0' : '100%'} 50%`,
+          zIndex: 2,
+          ease: Power0.easeNone,
+        },
+      );
+
+      const tweenPost2 = TweenLite.to(
+        this.$refs.post.$el,
+        halfDurationSec,
+        {
+          xPercent: 100 * dir,
+          rotationY: 90 * dir,
+          opacity: 0.3,
+          transformOrigin: `${dir > 0 ? '0' : '100%'} 50%`,
+          zIndex: 2,
+          ease: Power0.easeNone,
+        },
+      );
+
+      const tweenNext1 = TweenLite.fromTo(
+        dir > 0 ? this.$refs.prevPost.$el : this.$refs.nextPost.$el,
+        halfDurationSec,
+        {
+          xPercent: 100 * -dir,
+          rotationY: 90 * -dir,
+          opacity: 0.3,
+          transformOrigin: `${dir > 0 ? '100%' : '0'} 50%`,
+        },
+        {
+          xPercent: 50 * -dir,
+          z: -200,
+          rotationY: 45 * -dir,
+          transformOrigin: `${dir > 0 ? '100%' : '0'} 50%`,
+          ease: Power0.easeNone,
+        },
+      );
+
+      const tweenNext2 = TweenLite.to(
+        dir > 0 ? this.$refs.prevPost.$el : this.$refs.nextPost.$el,
+        halfDurationSec,
+        {
+          xPercent: 0,
+          z: 0,
+          rotationY: 0,
+          opacity: 1,
+          transformOrigin: `${dir > 0 ? '100%' : '0'} 50%`,
+          ease: Power0.easeNone,
+        },
+      );
+
+      const tween = new TimelineLite();
+      tween.add(tweenPost1, 0);
+      tween.add(tweenPost2, halfDurationSec);
+      tween.add(tweenNext1, 0);
+      tween.add(tweenNext2, halfDurationSec);
+      tween.pause();
+      return tween;
+    };
+
+    this.onPanUp = (e) => {
+      const yThresh = 0.4;
+      const progThresh = 0.45;
+
+      if (this.panMode === null) {
+        this.tween = this.createUpTween(yThresh);
+        this.panMode = TouchHandler.UP;
+      }
+
+      const height = this.$refs.post.$el.clientHeight * yThresh;
+      const progress = calcProgress(e.startPoint.y - e.point.y, height);
+
+      if (progress > progThresh && !this.panPassedThresh) {
+        this.$refs.emoji.classList.add('pop');
+        this.panPassedThresh = true;
+      } else if (progress <= progThresh && this.panPassedThresh) {
+        this.panPassedThresh = false;
+      }
+
+      this.tween.progress(progress);
+    };
+
+    this.onPanHorizontal = (e) => {
+      const xThresh = 0.4;
+      const progThresh = 0.45;
+
+      const dist = e.point.x - e.startPoint.x;
+      const dir = e.dir === TouchHandler.RIGHT ? 1 : -1;
+
+      if (this.panMode === null) {
+        if ((!this.enableNext && e.dir === TouchHandler.LEFT) ||
+          (!this.enablePrev && e.dir === TouchHandler.RIGHT)) {
+          return;
+        }
+
+        this.panMode = e.dir;
+        this.tween = this.createHorizontalTween(dir);
+      }
+
+      const width = this.$refs.post.$el.clientWidth * xThresh;
+      const progress = calcProgress(dist * dir, width);
+
+      if (progress > progThresh && !this.panPassedThresh) {
+        this.panPassedThresh = true;
+      } else if (progress <= progThresh && this.panPassedThresh) {
+        this.panPassedThresh = false;
+      }
+
+      this.tween.progress(progress);
+    };
   },
 
   mounted() {
-    import('../icons/up');
-    import('../icons/link');
+    document.documentElement.classList.add('dialog-open');
 
     trackPage('toilet');
 
-    this.hammer = new Hammer(this.$refs.container);
-    this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-    this.hammer.get('press').set({ time: 150 });
-    this.hammer.on('swipeup', () => this.openPost());
-    this.hammer.on('swipeleft', () => this.nextPost());
-    this.hammer.on('swiperight', () => this.prevPost());
-    this.hammer.on('press', (e) => {
-      e.preventDefault();
-      this.pauseTimer = true;
-    });
-    this.hammer.on('pressup', (e) => {
-      e.preventDefault();
-      this.pauseTimer = false;
-    });
-    this.hammer.on('tap', (e) => {
-      const rect = this.$refs.touch.getBoundingClientRect();
+    const upEndCallback = () => {
+      this.killTween();
+      this.$refs.emoji.classList.remove('pop');
+    };
 
-      if (e.center.y < rect.top || e.center.y > rect.bottom) {
-        return;
-      }
+    this.touchHandler = new TouchHandler(
+      this.$refs.container,
+      {
+        start: () => {
+          this.pauseTimer = true;
+          this.panPassedThresh = false;
+        },
+        end: () => {
+          this.pauseTimer = false;
 
-      if (e.center.x >= rect.left && e.center.x < rect.left + (rect.width / 2)) {
-        this.prevPost();
-      } else if (e.center.x < rect.left + rect.width &&
-        e.center.x >= rect.left + (rect.width / 2)) {
-        this.nextPost();
-      }
-    });
+          if (this.panMode === TouchHandler.UP) {
+            if (!this.panPassedThresh) {
+              this.tween.reverse().eventCallback('onReverseComplete', upEndCallback);
+            } else {
+              this.$refs.post.openLink();
+              this.tween.play().eventCallback('onComplete', upEndCallback);
+            }
+            this.panMode = null;
+          } else if (this.panMode === TouchHandler.LEFT || this.panMode === TouchHandler.RIGHT) {
+            if (!this.panPassedThresh) {
+              this.tween.reverse().eventCallback('onReverseComplete', () => {
+                this.killTween();
+                this.panMode = null;
+              });
+            } else {
+              this.tween.play().eventCallback('onComplete', () => {
+                this.killTween();
+
+                if (this.panMode === TouchHandler.LEFT) {
+                  this.goToNextPost();
+                } else {
+                  this.goToPrevPost();
+                }
+                this.panMode = null;
+              });
+            }
+          }
+        },
+        pan: (e) => {
+          if (e.dir === TouchHandler.UP) {
+            this.onPanUp(e);
+          } else if (e.dir === TouchHandler.LEFT || e.dir === TouchHandler.RIGHT) {
+            this.onPanHorizontal(e);
+          }
+        },
+        resetPan: () => {
+          this.killTween();
+          this.panMode = null;
+        },
+      },
+    );
+
+    this.touchHandler.start();
+
+    // this.hammer = new Hammer(this.$refs.container, { touchAction: 'pan-y' });
+    // this.hammer.get('swipe').set({ enable: true, direction: Hammer.DIRECTION_ALL });
+    // this.hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    // this.hammer.get('press').set({ time: 150 });
+
+    // this.hammer.on('panstart', (e) => {
+    //   console.log(e);
+    // });
+    //
+    // this.hammer.on('panup', (e) => {
+    //   console.log(e.distance);
+    // });
+    // this.hammer.on('swipeup', () => {
+    //   this.$refs.post.openLink()
+    // });
+    // this.hammer.on('swipeleft', () => this.nextPost());
+    // this.hammer.on('swiperight', () => this.prevPost());
+    // this.hammer.on('press', (e) => {
+    //   e.preventDefault();
+    //   this.pauseTimer = true;
+    // });
+    // this.hammer.on('tap', (e) => {
+    //   const rect = this.$refs.touch.getBoundingClientRect();
+    //
+    //   if (e.center.y < rect.top || e.center.y > rect.bottom) {
+    //     return;
+    //   }
+    //
+    //   if (e.center.x >= rect.left && e.center.x < rect.left + (rect.width / 2)) {
+    //     this.prevPost();
+    //   } else if (e.center.x < rect.left + rect.width &&
+    //     e.center.x >= rect.left + (rect.width / 2)) {
+    //     this.nextPost();
+    //   }
+    // });
 
     this.visibilityChangeCallback = () => {
       this.pauseTimer = !document.hasFocus();
@@ -231,24 +373,16 @@ export default {
     window.addEventListener('focus', this.visibilityChangeCallback);
     window.addEventListener('blur', this.visibilityChangeCallback);
 
-    this.fetchPage()
-      .then(() => {
-        if (this.posts.length) {
-          this.timerInterval = setInterval(() => this.onInterval(), 100);
-        }
-      });
+    this.fetchPage();
   },
 
   destroyed() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
+    document.documentElement.classList.remove('dialog-open');
 
     document.removeEventListener('visibilitychange', this.visibilityChangeCallback);
     window.removeEventListener('focus', this.visibilityChangeCallback);
     window.removeEventListener('blur', this.visibilityChangeCallback);
-    this.hammer.destroy();
+    this.touchHandler.stop();
   },
 
   methods: {
@@ -286,26 +420,24 @@ export default {
       this.pauseTimer = true;
     },
 
-    prevPost() {
+    goToPrevPost() {
       if (!this.enablePrev) {
         return;
       }
 
       ga('send', 'event', 'Toilet', 'Prev Post');
       this.stopTimer();
-      this.transition = 'cube-right';
       this.currentIndex -= 1;
       this.startTimer();
     },
 
-    nextPost() {
+    goToNextPost() {
       if (!this.enableNext) {
         return;
       }
 
       ga('send', 'event', 'Toilet', 'Next Post');
       this.stopTimer();
-      this.transition = 'cube-left';
       this.currentIndex += 1;
 
       if (this.currentIndex + 2 >= this.posts.length && !this.loading) {
@@ -314,50 +446,17 @@ export default {
 
       this.startTimer();
     },
-
-    onInterval() {
-      const current = new Date();
-      const dt = current - this.lastInterval;
-      this.lastInterval = current;
-
-      if (this.pauseTimer) {
-        return;
-      }
-
-      this.elapsed += dt;
-
-      if (this.elapsed >= this.duration) {
-        this.elapsed = this.duration;
-        this.nextPost();
-      }
-    },
-
-    openPost() {
-      if (this.type === 'post') {
-        ga('send', 'event', 'Post', 'Click', this.source);
-        mixpanel.track('Post Click', { source: this.source, toilet: true });
-      } else {
-        ga('send', 'event', 'Ad', 'Click', this.source);
-        mixpanel.track('Ad Click', { source: this.source, toilet: true });
-      }
-
-      const win = window.open(this.link, '_blank');
-      win.focus();
-    },
-
-    onBookmark() {
-      const bookmarked = !this.bookmarked;
-      ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
-      mixpanel.track('Post Bookmark', { source: this.source, toggle: bookmarked, toilet: true });
-      this.toggleBookmark({ id: this.currentPost.id, post: this.currentPost, bookmarked });
-      this.currentPost.bookmarked = bookmarked;
-      this.nextPost();
-    },
   },
 };
 </script>
 
 <style>
+@keyframes pop {
+  50% {
+    transform: scale(1.2);
+  }
+}
+
 .cube-left-enter-active {
   transform-origin: 0 50%;
   animation: cubeLeftIn 0.4s both ease-in;
@@ -443,157 +542,40 @@ export default {
   border-radius: 0;
   perspective: 1200px;
   box-shadow: none;
+  user-select: none;
 }
 
-.post {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+.pop {
+  animation: pop 0.3s linear 1;
+  transform-origin: center;
+}
+
+.wrapper {
+  position: relative;
   width: 100%;
   height: 100%;
-  justify-content: space-between;
-  z-index: 1;
-  overflow: hidden;
-  backface-visibility: hidden;
   will-change: transform;
-  transform-style: preserve-3d;
 }
 
-.background {
+.reveal {
   position: absolute;
   left: 0;
-  top: 0;
   right: 0;
-  bottom: 0;
+  top: 100%;
   width: 100%;
-  height: 100%;
-  opacity: 0.2;
-  z-index: -1;
-  object-fit: cover;
-}
-
-header {
-  position: relative;
-  padding: calc(var(--size-space) * 3);
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.5;
-    background: linear-gradient(0deg, rgba(39, 39, 39, 0) 0%, var(--color-background) 100%);
-    z-index: -1;
-  }
-
-  & > * {
-    margin: var(--size-space) 0;
-
-    &:first-child {
-      margin-top: 0;
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  & h4 {
-    font-style: italic;
-  }
-}
-
-.timer {
-  position: relative;
-  height: 4px;
-  border-radius: 100px;
-  background: var(--color-background);
-  box-shadow: 0 1px 0 0 #262626, 0 8px 16px 0 rgba(0, 0, 0, 0.1);
-}
-
-.timer-progress {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  border-radius: 100px;
-  background: var(--color-highlight);
-  transition: width 0.2s linear;
-}
-
-.logo {
-  width: 24px;
-  height: 24px;
-  margin-right: var(--size-space);
-  border-radius: calc(var(--size-space) / 2);
-}
-
-.back {
-  margin-left: auto;
-}
-
-h1 {
+  padding: calc(var(--size-space) * 4);
+  opacity: 0;
   color: var(--color-github);
-  margin: 0 calc(var(--size-space) * 4);
-}
+  font-weight: bold;
 
-footer {
-  position: relative;
-  padding: calc(var(--size-space) * 6) calc(var(--size-space) * 3) calc(var(--size-space) * 3);
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.5;
-    background: linear-gradient(180deg, rgba(39, 39, 39, 0) 0%, var(--color-background) 100%);
-    z-index: -1;
-  }
-
-  & span {
-    color: var(--color-github);
-    opacity: 0.5;
-    font-style: italic;
-    font-weight: bold;
+  & .emoji {
+    opacity: 0;
     margin-left: var(--size-space);
+
+    &.pop {
+      opacity: 1;
+    }
   }
-}
-
-.content {
-  & .svg-icon {
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
-  }
-}
-
-.svg-icon {
-  &.left {
-    transform: rotate(-90deg);
-  }
-
-  &.right {
-    transform: rotate(90deg);
-  }
-}
-
-.align-right {
-  margin-left: auto;
-}
-
-.show-on-tablet {
-  display: none;
-}
-
-.bookmarked .bookmark .svg-icon {
-  color: var(--color-highlight);
 }
 
 @media (--tablet) {
@@ -602,29 +584,6 @@ footer {
     height: 595px;
     margin: auto;
     border-radius: calc(var(--size-space) * 2);
-  }
-
-  footer {
-    padding: calc(var(--size-space) * 3);
-    background: var(--color-background-highlight);
-    box-shadow: 0 -1px 0 0 #262626, 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
-
-    &:before {
-      content: none;
-    }
-
-    & .svg-icon {
-      width: 28px;
-      height: 28px;
-    }
-  }
-
-  .hide-on-tablet {
-    display: none;
-  }
-
-  .show-on-tablet {
-    display: block;
   }
 }
 </style>
