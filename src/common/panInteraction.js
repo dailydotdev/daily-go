@@ -25,7 +25,9 @@ export default class PanInteraction {
       this.active = interaction;
       this.tween = interaction.tween();
       this.tween.pause();
+      return true;
     }
+    return false;
   }
 
   pan(e) {
@@ -67,22 +69,45 @@ export default class PanInteraction {
   }
 
   end() {
-    if (this.active) {
+    if (this.active && !this.playing) {
       if (this.passedThresh) {
         if (this.active.execPreAnimation) {
           this.active.execPreAnimation();
         }
-        this.tween.play().eventCallback('onComplete', () => {
-          if (this.active.execPostAnimation) {
-            this.active.execPostAnimation();
-          }
-          this.resetPan();
-        });
+        this.tween.play().eventCallback('onComplete', () => this.tweenComplete());
       } else {
         this.tween.reverse().eventCallback('onReverseComplete', () => {
           this.resetPan();
         });
       }
+    }
+  }
+
+  play(dir) {
+    if (!this.playing && this.startPan({ dir })) {
+      this.playing = true;
+      this.tween
+        .play()
+        .eventCallback('onComplete', () => this.tweenComplete());
+    }
+  }
+
+  tweenComplete() {
+    this.playing = false;
+    let async = false;
+    if (this.active.execPostAnimation) {
+      async = this.active.execPostAnimation();
+    }
+    if (async) {
+      setTimeout(() => this.resetPan());
+    } else {
+      this.resetPan();
+    }
+  }
+
+  swipe() {
+    if (this.active) {
+      this.passedThresh = true;
     }
   }
 }

@@ -9,7 +9,7 @@
       <div class="timer">
         <div
           class="timer-progress"
-          :style="{animationDuration: `${duration}ms`, animationPlayState: timerAnimState}"/>
+          ref="timer"/>
       </div>
       <div class="horizontal align-center">
         <AsyncImg
@@ -18,23 +18,31 @@
           :alt="source"
           v-if="post.type === 'post'"/>
         <h4 class="caption comment">{{ subheader }}</h4>
-        <router-link
-          to="/"
-          class="back align-right">
+        <button
+          class="back align-right"
+          @click.prevent="$emit('close')">
           <svgicon name="x"/>
-        </router-link>
+        </button>
       </div>
     </header>
     <div class="content horizontal align-center flex">
-      <svgicon
-        name="up"
-        class="show-on-tablet left"
-        v-visible="enablePrev"/>
+      <button
+        class="show-on-tablet"
+        v-visible="enablePrev"
+        @click.prevent="$emit('prev-post')">
+        <svgicon
+          name="up"
+          class="left"/>
+      </button>
       <h1 class="jumbo flex">{{ title | cardTitle }}</h1>
-      <svgicon
-        name="up"
-        class="show-on-tablet right"
-        v-visible="enableNext"/>
+      <button
+        class="show-on-tablet"
+        v-visible="enableNext"
+        @click.prevent="$emit('next-post')">
+        <svgicon
+          name="up"
+          class="right"/>
+      </button>
     </div>
     <footer class="horizontal align-center">
       <a
@@ -67,6 +75,8 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import 'gsap/CSSPlugin';
+import TweenLite, { Power0 } from 'gsap/TweenLite';
 import AsyncImg from '../components/AsyncImg.vue';
 
 export default {
@@ -95,7 +105,7 @@ export default {
     },
     pauseTimer: {
       type: Boolean,
-      required: true,
+      default: true,
     },
   },
 
@@ -174,28 +184,55 @@ export default {
       this.post.bookmarked = bookmarked;
       // this.nextPost();
     },
+
+    resetTimer() {
+      this.timerTween.progress(0);
+    },
+  },
+
+  watch: {
+    pauseTimer() {
+      if (this.pauseTimer) {
+        this.timerTween.pause();
+      } else {
+        this.timerTween.resume();
+      }
+    },
   },
 
   mounted() {
     import('../icons/up');
     import('../icons/link');
+    import('../icons/bookmark');
 
     if (this.post.type === 'ad') {
       ga('send', 'event', 'Ad', 'Impression', this.source);
     }
+
+    this.timerTween = TweenLite.fromTo(
+      this.$refs.timer,
+      this.duration / 1000,
+      { width: 0 },
+      {
+        width: '100%',
+        ease: Power0.easeNone,
+      },
+    );
+
+    this.timerTween.eventCallback('onComplete', () => this.$emit('next-post'));
+
+    if (this.pauseTimer) {
+      this.timerTween.pause();
+    } else {
+      this.timerTween.play();
+    }
+  },
+
+  destroyed() {
+    this.timerTween.kill();
   },
 };
 </script>
-<style>
-@keyframes timer {
-  0% {
-    transform: scaleX(0);
-  }
-  100% {
-    transform: scaleX(1);
-  }
-}
-</style>
 <style scoped>
 @import '../styles/custom.pcss';
 
@@ -211,7 +248,6 @@ export default {
   overflow: hidden;
   backface-visibility: hidden;
   background: var(--color-background);
-  will-change: transform, opacity;
   transform-style: preserve-3d;
   z-index: 1;
 }
@@ -267,7 +303,6 @@ header {
   height: 4px;
   border-radius: 100px;
   background: var(--color-background);
-  box-shadow: 0 1px 0 0 #262626, 0 8px 16px 0 rgba(0, 0, 0, 0.1);
 }
 
 .timer-progress {
@@ -279,8 +314,7 @@ header {
   border-radius: 100px;
   background: var(--color-highlight);
   transform-origin: left;
-  animation-name: timer;
-  animation-timing-function: linear;
+  will-change: width;
 }
 
 .logo {

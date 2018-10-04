@@ -30,6 +30,17 @@ const angleToDirection = (angle) => {
   return UP;
 };
 
+const calcAxisDelta = (dir, startPoint, point) => {
+  if (dir === RIGHT) {
+    return point.x - startPoint.x;
+  } else if (dir === LEFT) {
+    return startPoint.x - point.x;
+  } else if (dir === UP) {
+    return startPoint.y - point.y;
+  }
+  return point.y - startPoint.y;
+};
+
 export default class TouchHandler {
   static RIGHT = RIGHT;
   static DOWN = DOWN;
@@ -40,6 +51,8 @@ export default class TouchHandler {
     this.elem = elem;
     this.callbacks = callbacks;
     this.panThreshold = 10 * 10;
+    this.tapThreshold = 200;
+    this.swipeThreshold = 0.2;
 
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -81,9 +94,34 @@ export default class TouchHandler {
 
     window.addEventListener('touchend', (e) => {
       e.preventDefault();
+
+      const dt = e.timeStamp - this.startEvent.timeStamp;
+
+      if (!this.isPanning && dt < this.tapThreshold) {
+        this.callbacks.end();
+        this.callbacks.tap(e);
+      } else {
+        const start = changedTouchToPoint(this.startEvent);
+        const end = changedTouchToPoint(e);
+        const dir = angleToDirection(angleRadians(start, end));
+        const dist = calcAxisDelta(dir, start, end);
+        const v = dist / dt;
+
+        if (v > this.swipeThreshold && dir === this.panDir) {
+          this.callbacks.swipe({
+            startEvent: this.startEvent,
+            event: e,
+            startPoint: start,
+            point: end,
+            dir,
+          });
+        }
+
+        this.callbacks.end();
+      }
+
       this.isPanning = false;
       this.panDir = null;
-      this.callbacks.end();
       window.removeEventListener('touchmove', this.onTouchMove);
     }, { once: true, passive: false });
   }

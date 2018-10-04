@@ -19,6 +19,11 @@
             :src="profileImage"
             alt="Profile image">
         </button>
+        <router-link
+          to="/toilet"
+          class="btn-icon">
+          <svgicon name="toilet"/>
+        </router-link>
         <!--<DaSwitch icon="bookmark" :checked="true" @toggle="onToggleBookmark"></DaSwitch>-->
       </footer>
       <div
@@ -259,6 +264,7 @@ export default {
     import('../icons/github');
     import('../icons/google');
     import('../icons/x');
+    import('../icons/toilet');
   },
 };
 </script>
@@ -303,7 +309,7 @@ button {
     border-radius: 4px;
   }
 
-  & svg-icon {
+  & .svg-icon {
     width: 28px;
     height: 28px;
   }
