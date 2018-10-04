@@ -77,14 +77,14 @@ export default class TouchHandler {
   }
 
   bindOnTouch() {
-    document.addEventListener('touchmove', this.onTouchMove, { passive: false });
+    window.addEventListener('touchmove', this.onTouchMove, { passive: false });
 
-    document.addEventListener('touchend', (e) => {
+    window.addEventListener('touchend', (e) => {
       e.preventDefault();
       this.isPanning = false;
       this.panDir = null;
       this.callbacks.end();
-      document.removeEventListener('touchmove', this.onTouchMove);
+      window.removeEventListener('touchmove', this.onTouchMove);
     }, { once: true, passive: false });
   }
 
@@ -93,15 +93,31 @@ export default class TouchHandler {
     const end = changedTouchToPoint(e);
     const dir = angleToDirection(angleRadians(start, end));
 
+
     if (!this.isPanning) {
       const dist = sqrtDist(start, end);
       if (dist >= this.panThreshold) {
         this.isPanning = true;
         this.panDir = dir;
+        this.callbacks.startPan({
+          startEvent: this.startEvent,
+          event: e,
+          startPoint: start,
+          point: end,
+          dir: this.panDir,
+        });
       } else {
         return;
       }
     }
+
+    const customEvent = {
+      startEvent: this.startEvent,
+      event: e,
+      startPoint: start,
+      point: end,
+      dir: this.panDir,
+    };
 
     const distY = end.y - start.y;
     const distX = end.x - start.x;
@@ -111,22 +127,10 @@ export default class TouchHandler {
       (this.panDir === TouchHandler.UP && distY > 0) ||
       (this.panDir === TouchHandler.DOWN && distY < 0)) {
       this.resetPan(e);
-      this.callbacks.resetPan({
-        startEvent: this.startEvent,
-        event: e,
-        startPoint: start,
-        point: end,
-        dir: this.panDir,
-      });
+      this.callbacks.resetPan(customEvent);
       return;
     }
 
-    this.callbacks.pan({
-      startEvent: this.startEvent,
-      event: e,
-      startPoint: start,
-      point: end,
-      dir: this.panDir,
-    });
+    this.callbacks.pan(customEvent);
   }
 }

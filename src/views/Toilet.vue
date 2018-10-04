@@ -55,12 +55,11 @@ import { mapState, mapMutations } from 'vuex';
 import 'gsap/CSSPlugin';
 import TweenLite, { Power0 } from 'gsap/TweenLite';
 import TimelineLite from 'gsap/TimelineLite';
-import TouchHandler from '../common/touch';
+import TouchHandler from '../common/touchHandler';
+import PanInteraction from '../common/panInteraction';
 import { fetchToilet } from '../common/api';
 import { trackPage } from '../common/analytics';
 import DaToiletItem from '../components/DaToiletItem.vue';
-
-const calcProgress = (value, max) => Math.min(1, Math.max(0, value / max));
 
 export default {
   name: 'Toilet',
@@ -115,14 +114,6 @@ export default {
   },
 
   created() {
-    this.killTween = () => {
-      if (this.tween) {
-        this.tween.progress(0);
-        this.tween.kill();
-        this.tween = null;
-      }
-    };
-
     this.createUpTween = (yThresh) => {
       const duration = 200;
 
@@ -214,56 +205,36 @@ export default {
       return tween;
     };
 
-    this.onPanUp = (e) => {
-      const yThresh = 0.4;
-      const progThresh = 0.45;
+    const upThresh = 0.4;
+    const horThresh = 1;
+    const horProgThresh = 0.5;
 
-      if (this.panMode === null) {
-        this.tween = this.createUpTween(yThresh);
-        this.panMode = TouchHandler.UP;
-      }
-
-      const height = this.$refs.post.$el.clientHeight * yThresh;
-      const progress = calcProgress(e.startPoint.y - e.point.y, height);
-
-      if (progress > progThresh && !this.panPassedThresh) {
-        this.$refs.emoji.classList.add('pop');
-        this.panPassedThresh = true;
-      } else if (progress <= progThresh && this.panPassedThresh) {
-        this.panPassedThresh = false;
-      }
-
-      this.tween.progress(progress);
-    };
-
-    this.onPanHorizontal = (e) => {
-      const xThresh = 0.4;
-      const progThresh = 0.45;
-
-      const dist = e.point.x - e.startPoint.x;
-      const dir = e.dir === TouchHandler.RIGHT ? 1 : -1;
-
-      if (this.panMode === null) {
-        if ((!this.enableNext && e.dir === TouchHandler.LEFT) ||
-          (!this.enablePrev && e.dir === TouchHandler.RIGHT)) {
-          return;
-        }
-
-        this.panMode = e.dir;
-        this.tween = this.createHorizontalTween(dir);
-      }
-
-      const width = this.$refs.post.$el.clientWidth * xThresh;
-      const progress = calcProgress(dist * dir, width);
-
-      if (progress > progThresh && !this.panPassedThresh) {
-        this.panPassedThresh = true;
-      } else if (progress <= progThresh && this.panPassedThresh) {
-        this.panPassedThresh = false;
-      }
-
-      this.tween.progress(progress);
-    };
+    this.panInteraction = new PanInteraction({
+      [TouchHandler.UP]: {
+        tween: () => this.createUpTween(upThresh),
+        threshold: 0.45,
+        max: () => this.$refs.post.$el.clientHeight * upThresh,
+        onThresholdPassed: () => this.$refs.emoji.classList.add('pop'),
+        clear: () => this.$refs.emoji.classList.remove('pop'),
+        execPreAnimation: () => this.$refs.post.openLink(),
+      },
+      [TouchHandler.LEFT]: {
+        tween: () => this.createHorizontalTween(-1),
+        threshold: horProgThresh,
+        max: () => this.$refs.post.$el.clientWidth * horThresh,
+        execPostAnimation: () => this.goToNextPost(),
+        canInteract: () => this.enableNext,
+      },
+      [TouchHandler.RIGHT]: {
+        tween: () => this.createHorizontalTween(1),
+        threshold: horProgThresh,
+        max: () => this.$refs.post.$el.clientWidth * horThresh,
+        execPostAnimation: () => this.goToPrevPost(),
+        canInteract: () => this.enablePrev,
+      },
+    }, () => {
+      this.panMode = null;
+    });
   },
 
   mounted() {
@@ -271,100 +242,26 @@ export default {
 
     trackPage('toilet');
 
-    const upEndCallback = () => {
-      this.killTween();
-      this.$refs.emoji.classList.remove('pop');
-    };
-
     this.touchHandler = new TouchHandler(
       this.$refs.container,
       {
         start: () => {
           this.pauseTimer = true;
-          this.panPassedThresh = false;
         },
         end: () => {
           this.pauseTimer = false;
-
-          if (this.panMode === TouchHandler.UP) {
-            if (!this.panPassedThresh) {
-              this.tween.reverse().eventCallback('onReverseComplete', upEndCallback);
-            } else {
-              this.$refs.post.openLink();
-              this.tween.play().eventCallback('onComplete', upEndCallback);
-            }
-            this.panMode = null;
-          } else if (this.panMode === TouchHandler.LEFT || this.panMode === TouchHandler.RIGHT) {
-            if (!this.panPassedThresh) {
-              this.tween.reverse().eventCallback('onReverseComplete', () => {
-                this.killTween();
-                this.panMode = null;
-              });
-            } else {
-              this.tween.play().eventCallback('onComplete', () => {
-                this.killTween();
-
-                if (this.panMode === TouchHandler.LEFT) {
-                  this.goToNextPost();
-                } else {
-                  this.goToPrevPost();
-                }
-                this.panMode = null;
-              });
-            }
-          }
+          this.panInteraction.end();
         },
-        pan: (e) => {
-          if (e.dir === TouchHandler.UP) {
-            this.onPanUp(e);
-          } else if (e.dir === TouchHandler.LEFT || e.dir === TouchHandler.RIGHT) {
-            this.onPanHorizontal(e);
-          }
+        startPan: (e) => {
+          this.panMode = e.dir;
+          this.panInteraction.startPan(e);
         },
-        resetPan: () => {
-          this.killTween();
-          this.panMode = null;
-        },
+        pan: e => this.panInteraction.pan(e),
+        resetPan: () => this.panInteraction.resetPan(),
       },
     );
 
     this.touchHandler.start();
-
-    // this.hammer = new Hammer(this.$refs.container, { touchAction: 'pan-y' });
-    // this.hammer.get('swipe').set({ enable: true, direction: Hammer.DIRECTION_ALL });
-    // this.hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-    // this.hammer.get('press').set({ time: 150 });
-
-    // this.hammer.on('panstart', (e) => {
-    //   console.log(e);
-    // });
-    //
-    // this.hammer.on('panup', (e) => {
-    //   console.log(e.distance);
-    // });
-    // this.hammer.on('swipeup', () => {
-    //   this.$refs.post.openLink()
-    // });
-    // this.hammer.on('swipeleft', () => this.nextPost());
-    // this.hammer.on('swiperight', () => this.prevPost());
-    // this.hammer.on('press', (e) => {
-    //   e.preventDefault();
-    //   this.pauseTimer = true;
-    // });
-    // this.hammer.on('tap', (e) => {
-    //   const rect = this.$refs.touch.getBoundingClientRect();
-    //
-    //   if (e.center.y < rect.top || e.center.y > rect.bottom) {
-    //     return;
-    //   }
-    //
-    //   if (e.center.x >= rect.left && e.center.x < rect.left + (rect.width / 2)) {
-    //     this.prevPost();
-    //   } else if (e.center.x < rect.left + rect.width &&
-    //     e.center.x >= rect.left + (rect.width / 2)) {
-    //     this.nextPost();
-    //   }
-    // });
 
     this.visibilityChangeCallback = () => {
       this.pauseTimer = !document.hasFocus();
