@@ -67,7 +67,7 @@
 
 <script>
 import { mapMutations } from 'vuex';
-import AsyncImg from '../components/AsyncImg';
+import AsyncImg from '../components/AsyncImg.vue';
 
 export default {
   name: 'DaToiletItem',

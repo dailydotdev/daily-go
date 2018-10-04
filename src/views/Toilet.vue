@@ -456,76 +456,6 @@ export default {
     transform: scale(1.2);
   }
 }
-
-.cube-left-enter-active {
-  transform-origin: 0 50%;
-  animation: cubeLeftIn 0.4s both ease-in;
-}
-
-.cube-left-leave-active {
-  transform-origin: 100% 50%;
-  animation: cubeLeftOut 0.4s both ease-in;
-  z-index: 2;
-}
-
-.cube-right-enter-active {
-  transform-origin: 100% 50%;
-  animation: cubeRightIn 0.4s both ease-in;
-}
-
-.cube-right-leave-active {
-  transform-origin: 0 50%;
-  animation: cubeRightOut 0.4s both ease-in;
-  z-index: 2;
-}
-
-@keyframes cubeLeftOut {
-  0% {
-  }
-  50% {
-    animation-timing-function: ease-out;
-    transform: translateX(-50%) translateZ(-200px) rotateY(-45deg);
-  }
-  100% {
-    opacity: .3;
-    transform: translateX(-100%) rotateY(-90deg);
-  }
-}
-
-@keyframes cubeLeftIn {
-  0% {
-    opacity: .3;
-    transform: translateX(100%) rotateY(90deg);
-  }
-  50% {
-    animation-timing-function: ease-out;
-    transform: translateX(50%) translateZ(-200px) rotateY(45deg);
-  }
-}
-
-@keyframes cubeRightOut {
-  0% {
-  }
-  50% {
-    animation-timing-function: ease-out;
-    transform: translateX(50%) translateZ(-200px) rotateY(45deg);
-  }
-  100% {
-    opacity: .3;
-    transform: translateX(100%) rotateY(90deg);
-  }
-}
-
-@keyframes cubeRightIn {
-  0% {
-    opacity: .3;
-    transform: translateX(-100%) rotateY(-90deg);
-  }
-  50% {
-    animation-timing-function: ease-out;
-    transform: translateX(-50%) translateZ(-200px) rotateY(-45deg);
-  }
-}
 </style>
 
 <style scoped>
@@ -543,6 +473,7 @@ export default {
   perspective: 1200px;
   box-shadow: none;
   user-select: none;
+  touch-action: none;
 }
 
 .pop {

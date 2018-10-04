@@ -8,7 +8,7 @@ const touchToPoint = t => ({
   y: t.clientY,
 });
 
-const changedTouchToPoint = e => touchToPoint(e.changedTouches[0]);
+const changedTouchToPoint = e => touchToPoint(e.touches[0] || e.changedTouches[0]);
 
 const sqrtDist = (p1, p2) => {
   const dx = p1.x - p2.x;
@@ -46,7 +46,7 @@ export default class TouchHandler {
   }
 
   start() {
-    this.elem.addEventListener('touchstart', this.onTouchStart);
+    this.elem.addEventListener('touchstart', this.onTouchStart, { passive: false });
   }
 
   stop() {
@@ -77,15 +77,15 @@ export default class TouchHandler {
   }
 
   bindOnTouch() {
-    window.addEventListener('touchmove', this.onTouchMove);
+    document.addEventListener('touchmove', this.onTouchMove, { passive: false });
 
-    window.addEventListener('touchend', (e) => {
+    document.addEventListener('touchend', (e) => {
       e.preventDefault();
       this.isPanning = false;
       this.panDir = null;
       this.callbacks.end();
-      window.removeEventListener('touchmove', this.onTouchMove);
-    }, { once: true });
+      document.removeEventListener('touchmove', this.onTouchMove);
+    }, { once: true, passive: false });
   }
 
   onTouchMove(e) {
