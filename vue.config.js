@@ -75,8 +75,12 @@ module.exports = {
           handler: 'cacheFirst',
         },
         {
-          // eslint-disable-next-line
-          urlPattern: new RegExp('/.*'),
+          urlPattern: '/',
+          method: 'GET',
+          handler: 'networkFirst',
+        },
+        {
+          urlPattern: new RegExp('^/(toilet|login|oauth|notSupported).*'),
           method: 'GET',
           handler: 'networkFirst',
         },

@@ -56,7 +56,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import 'gsap/CSSPlugin';
+import CSSPlugin from 'gsap/CSSPlugin';
 import TweenLite, { Power0, Power1 } from 'gsap/TweenLite';
 import TimelineLite from 'gsap/TimelineLite';
 import TouchHandler from '../common/touchHandler';
@@ -64,6 +64,10 @@ import PanInteraction from '../common/panInteraction';
 import { fetchToilet } from '../common/api';
 import { trackPage } from '../common/analytics';
 import DaToiletItem from '../components/DaToiletItem.vue';
+
+// workaround to force importing CSSPlugin
+// eslint-disable-next-line
+CSSPlugin.version;
 
 export default {
   name: 'Toilet',
