@@ -37,14 +37,16 @@ Vue.directive('fit-height', {
   },
 });
 
-Vue.filter('cardTitle', (value) => {
-  const maxLength = 102;
+const limitString = maxLength => (value) => {
   if (value.length <= maxLength) {
     return value;
   }
 
   return `${value.substr(0, maxLength - 3)}...`;
-});
+};
+
+Vue.filter('cardTitle', limitString(102));
+Vue.filter('toiletTitle', limitString(160));
 
 Vue.filter('provider', (value) => {
   if (value === 'github') {

@@ -327,11 +327,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin: var(--size-space) calc(var(--size-space) * 2);
+  margin: calc(var(--size-space) * 2);
   padding-bottom: var(--size-footer);
 
   & > * {
-    margin: var(--size-space) 0;
+    margin: calc(var(--size-space) * 2) 0;
   }
 
   & header {

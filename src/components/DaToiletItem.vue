@@ -34,7 +34,7 @@
           name="up"
           class="left"/>
       </button>
-      <h1 class="jumbo flex">{{ title | cardTitle }}</h1>
+      <h1 class="jumbo flex">{{ title | toiletTitle }}</h1>
       <button
         class="show-on-tablet"
         v-visible="enableNext"
@@ -109,6 +109,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      bookmarked: false,
+    };
+  },
+
   computed: {
     logo() {
       return this.post.type === 'post' ? this.post.publication.image : '';
@@ -140,10 +146,6 @@ export default {
       return this.post.type === 'ad' ? this.post.pixel : [];
     },
 
-    bookmarked() {
-      return this.post ? this.post.bookmarked : false;
-    },
-
     subheader() {
       if (this.post.type === 'post') {
         return `// ${this.source}`;
@@ -151,10 +153,6 @@ export default {
         return '/# PROMOTED #/';
       }
       return '';
-    },
-
-    timerAnimState() {
-      return this.pauseTimer ? 'paused' : 'running';
     },
   },
 
@@ -181,8 +179,7 @@ export default {
       ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
       mixpanel.track('Post Bookmark', { source: this.source, toggle: bookmarked, toilet: true });
       this.toggleBookmark({ id: this.post.id, post: this.post, bookmarked });
-      this.post.bookmarked = bookmarked;
-      // this.nextPost();
+      this.bookmarked = bookmarked;
     },
 
     resetTimer() {
@@ -196,6 +193,12 @@ export default {
         this.timerTween.pause();
       } else {
         this.timerTween.resume();
+      }
+    },
+
+    post() {
+      if (this.post) {
+        this.bookmarked = this.post.bookmarked;
       }
     },
   },
@@ -233,6 +236,13 @@ export default {
   },
 };
 </script>
+<style>
+@keyframes bookmark {
+  50% {
+    transform: scale(1.5);
+  }
+}
+</style>
 <style scoped>
 @import '../styles/custom.pcss';
 
@@ -267,7 +277,7 @@ export default {
 
 header {
   position: relative;
-  padding: calc(var(--size-space) * 3);
+  padding: calc(var(--size-space) * 4) calc(var(--size-space) * 3);
 
   &:before {
     content: '';
@@ -335,7 +345,7 @@ h1 {
 
 footer {
   position: relative;
-  padding: calc(var(--size-space) * 6) calc(var(--size-space) * 3) calc(var(--size-space) * 3);
+  padding: calc(var(--size-space) * 6) calc(var(--size-space) * 3) calc(var(--size-space) * 4);
 
   &:before {
     content: '';
@@ -355,6 +365,10 @@ footer {
     font-style: italic;
     font-weight: bold;
     margin-left: var(--size-space);
+  }
+
+  & a:hover span {
+    opacity: 1;
   }
 }
 
@@ -380,8 +394,17 @@ footer {
   margin-left: auto;
 }
 
-.bookmarked .bookmark .svg-icon {
-  color: var(--color-highlight);
+.bookmark .svg-icon {
+  transition: color 0.3s ease-in;
+  transform-origin: center;
+}
+
+.bookmarked .bookmark {
+  animation: bookmark 0.3s linear 1;
+
+  & .svg-icon {
+    color: var(--color-highlight);
+  }
 }
 
 @media (--tablet) {
@@ -398,6 +421,10 @@ footer {
       width: 28px;
       height: 28px;
     }
+  }
+
+  h1 {
+    margin: 0;
   }
 }
 </style>

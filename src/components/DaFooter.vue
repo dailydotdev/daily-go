@@ -281,7 +281,7 @@ footer {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: calc(var(--size-space) * 2);
+  padding: calc(var(--size-space) * 3);
   border-radius: 16px 16px 0 0;
   background: var(--color-background-highlight);
   box-shadow: 0 -1px 0 0 var(--color-background), 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
