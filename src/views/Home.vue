@@ -267,7 +267,7 @@ export default {
   }
 
   & h1 {
-    color: var(--color-github);
+    color: var(--color-white);
     text-transform: uppercase;
     font-weight: bold;
   }
@@ -283,8 +283,8 @@ export default {
     margin-top: calc(var(--size-space) * 4);
     align-items: center;
     justify-content: center;
-    color: var(--color-github-invert);
-    background: var(--color-github);
+    color: var(--color-black);
+    background: var(--color-white);
     border-radius: var(--size-space);
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
     font-weight: 700;
@@ -384,6 +384,10 @@ export default {
 }
 
 @media (--tablet) {
+  .empty {
+    justify-content: center;
+  }
+
   .feed {
     margin: calc(var(--size-space) * 6) 0;
 

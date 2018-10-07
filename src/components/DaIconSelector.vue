@@ -54,7 +54,7 @@ export default {
   outline: 0;
 
   &:hover .svg-icon {
-    color: var(--color-github);
+    color: var(--color-white);
   }
 
   &[pressed] {

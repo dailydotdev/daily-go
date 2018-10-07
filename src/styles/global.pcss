@@ -27,8 +27,9 @@ html {
   --color-special2: #9DCB74;
   --color-special3: #D77E2B;
   --color-special4: #698C5A;
-  --color-github: white;
-  --color-github-invert: black;
+  --color-white: white;
+  --color-white-trans: rgba(0, 0, 0, 0);
+  --color-black: black;
 
   --shadow-offset: 8px;
 
@@ -46,8 +47,9 @@ html {
     --color-special2: #9DCB74;
     --color-special3: #DE7C20;
     --color-special4: #5F9F44;
-    --color-github: black;
-    --color-github-invert: white;
+    --color-white: black;
+    --color-white-trans: rgba(255, 255, 255, 0);
+    --color-black: white;
 
     --shadow-offset: 2px;
 
@@ -136,12 +138,6 @@ button {
   color: var(--color-comment);
 }
 
-a, button {
-  &:hover .svg-icon {
-    color: var(--color-github);
-  }
-}
-
 .svg-fill {
   fill: currentColor;
   stroke: none;
@@ -224,6 +220,12 @@ a, button {
 }
 
 @media (--tablet) {
+  a, button {
+    &:hover .svg-icon {
+      color: var(--color-white);
+    }
+  }
+
   .hide-on-tablet {
     display: none;
   }

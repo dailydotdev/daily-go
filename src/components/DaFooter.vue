@@ -410,7 +410,7 @@ button {
 
     & .name {
       margin-bottom: 0;
-      color: var(--color-github);
+      color: var(--color-white);
       font-weight: bold;
     }
 

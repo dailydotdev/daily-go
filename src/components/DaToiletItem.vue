@@ -287,7 +287,7 @@ header {
     right: 0;
     bottom: 0;
     opacity: 0.5;
-    background: linear-gradient(0deg, rgba(39, 39, 39, 0) 0%, var(--color-background) 100%);
+    background: linear-gradient(0deg, var(--color-white-trans) 0%, var(--color-black) 100%);
     z-index: -1;
   }
 
@@ -339,7 +339,7 @@ header {
 }
 
 h1 {
-  color: var(--color-github);
+  color: var(--color-white);
   margin: 0 calc(var(--size-space) * 4);
 }
 
@@ -355,12 +355,12 @@ footer {
     right: 0;
     bottom: 0;
     opacity: 0.5;
-    background: linear-gradient(180deg, rgba(39, 39, 39, 0) 0%, var(--color-background) 100%);
+    background: linear-gradient(180deg, var(--color-white-trans) 0%, var(--color-black) 100%);
     z-index: -1;
   }
 
   & span {
-    color: var(--color-github);
+    color: var(--color-white);
     opacity: 0.5;
     font-style: italic;
     font-weight: bold;

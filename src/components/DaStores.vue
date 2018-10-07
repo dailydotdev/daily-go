@@ -37,8 +37,8 @@ export default {
     align-items: center;
     justify-content: center;
     border-radius: var(--size-space);
-    background: var(--color-github);
-    color: var(--color-github-invert);
+    background: var(--color-white);
+    color: var(--color-black);
     font-weight: bold;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
 

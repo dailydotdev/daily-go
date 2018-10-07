@@ -490,7 +490,7 @@ export default {
   width: 100%;
   padding: calc(var(--size-space) * 4);
   opacity: 0;
-  color: var(--color-github);
+  color: var(--color-white);
   font-weight: bold;
   will-change: transform;
 

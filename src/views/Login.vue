@@ -93,7 +93,7 @@ export default {
   }
 
   & h1 {
-    color: var(--color-github);
+    color: var(--color-white);
     text-transform: uppercase;
     margin: var(--size-space) 0;
     font-weight: bold;
@@ -132,8 +132,8 @@ export default {
       padding: 0 calc(var(--size-space) * 2) 0 10px;
       flex-direction: row;
       align-items: center;
-      color: var(--color-github-invert);
-      background: var(--color-github);
+      color: var(--color-black);
+      background: var(--color-white);
       border-radius: var(--size-space);
       box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
 
