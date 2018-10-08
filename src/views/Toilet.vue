@@ -8,9 +8,11 @@
       role="dialog"
       ref="container"
       aria-modal="true">
+      <DaSpinner v-if="!posts.length"/>
       <div
         class="wrapper"
-        ref="wrapper">
+        ref="wrapper"
+        v-else>
         <DaToiletItem
           :post="prevPost"
           ref="prevPost"
@@ -64,6 +66,7 @@ import PanInteraction from '../common/panInteraction';
 import { fetchToilet } from '../common/api';
 import { trackPage } from '../common/analytics';
 import DaToiletItem from '../components/DaToiletItem.vue';
+import DaSpinner from '../components/DaSpinner.vue';
 
 // workaround to force importing CSSPlugin
 // eslint-disable-next-line
@@ -73,6 +76,7 @@ export default {
   name: 'Toilet',
 
   components: {
+    DaSpinner,
     DaToiletItem,
   },
 
@@ -353,6 +357,10 @@ export default {
     }),
 
     async fetchPage() {
+      if (this.ended) {
+        return;
+      }
+
       this.loading = true;
       const newPosts = await fetchToilet(this.latest, this.currentPage, this.accessToken);
       if (newPosts) {
@@ -503,6 +511,15 @@ export default {
       opacity: 1;
     }
   }
+}
+
+.spinner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 @media (--tablet) {
