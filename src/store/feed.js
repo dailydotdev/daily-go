@@ -78,7 +78,7 @@ export default {
         const index = state.bookmarks.findIndex(bookmark => bookmark.id === id);
         state.bookmarks.splice(index, 1);
       } else {
-        state.bookmarks.unshift(post);
+        state.bookmarks.unshift(Object.assign({}, post, { bookmarked }));
       }
     },
   },
