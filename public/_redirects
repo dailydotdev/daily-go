@@ -1,2 +1,3 @@
 /api/*  https://app.dailynow.co/:splat  200
+https://pwa.dailynow.co/* https://go.dailynow.co/:splat 301!
 /*    /index.html   200
