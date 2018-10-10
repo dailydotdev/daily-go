@@ -1,3 +1,3 @@
 export default function () {
-  return /Mobi|Android/i.test(navigator.userAgent);
+  return window.CSS && window.CSS.supports && window.CSS.supports('color', 'var(--primary)');
 }

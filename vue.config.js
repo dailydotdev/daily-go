@@ -2,7 +2,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://app.dailynow.co',
+        // target: 'http://localhost:4000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '',
@@ -10,8 +11,9 @@ module.exports = {
       },
     },
   },
+  productionSourceMap: false,
   pwa: {
-    name: 'Daily',
+    name: 'Daily Go',
     themeColor: '#393C3E',
     msTileColor: '#393C3E',
     iconPaths: {
@@ -73,8 +75,12 @@ module.exports = {
           handler: 'cacheFirst',
         },
         {
-          // eslint-disable-next-line
-          urlPattern: new RegExp('/.*'),
+          urlPattern: '/',
+          method: 'GET',
+          handler: 'networkFirst',
+        },
+        {
+          urlPattern: new RegExp('^/(toilet|login|oauth|notSupported).*'),
           method: 'GET',
           handler: 'networkFirst',
         },

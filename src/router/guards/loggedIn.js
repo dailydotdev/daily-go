@@ -3,7 +3,8 @@ import store from '../../store';
 
 export default function (to, from, next) {
   if (!store.getters['user/isLoggedIn']) {
-    router.replace('/login');
+    const url = to.path !== '/' ? `?from=${to.path}` : '';
+    router.replace(`/login${url}`);
   }
   if (store.getters['user/isTokenAboutToExpire']) {
     store.dispatch('user/refreshToken')

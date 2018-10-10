@@ -60,17 +60,17 @@ export default {
 
     &.red {
       background: #CA4151;
-      color: var(--color-github-invert);
+      color: var(--color-black);
     }
 
     &.green {
       background: var(--color-special4);
-      color: var(--color-github-invert);
+      color: var(--color-black);
     }
 
     &.comment {
       background: var(--color-comment);
-      color: var(--color-github-invert);
+      color: var(--color-black);
     }
   }
 
@@ -114,7 +114,7 @@ header {
 
   & .caption {
     font-weight: bold;
-    color: var(--color-github);
+    color: var(--color-white);
     margin-left: var(--size-space);
   }
 }
@@ -122,7 +122,7 @@ header {
 .content {
   padding: calc(var(--size-space) * 2);
   overflow: auto;
-  background: var(--color-github-invert);
+  background: var(--color-black);
   border-radius: 0 0 var(--size-space) var(--size-space);
   box-shadow: 0 8px 32px 16px rgba(0, 0, 0, 0.32);
   word-break: break-all;

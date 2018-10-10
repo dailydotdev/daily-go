@@ -7,6 +7,7 @@
       @leave="leave"
       :css="false">
       <footer
+        class="limit-width"
         v-if="!opened"
         ref="footer">
         <button
@@ -18,6 +19,11 @@
             :src="profileImage"
             alt="Profile image">
         </button>
+        <router-link
+          to="/toilet"
+          class="btn-icon">
+          <svgicon name="toilet"/>
+        </router-link>
         <!--<DaSwitch icon="bookmark" :checked="true" @toggle="onToggleBookmark"></DaSwitch>-->
       </footer>
       <div
@@ -258,22 +264,24 @@ export default {
     import('../icons/github');
     import('../icons/google');
     import('../icons/x');
+    import('../icons/toilet');
   },
 };
 </script>
 
 <style scoped>
+@import '../styles/custom.pcss';
+
 footer {
   position: fixed;
   display: flex;
-  left: 0;
   bottom: 0;
   width: 100%;
   height: var(--size-footer);
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: calc(var(--size-space) * 2);
+  padding: calc(var(--size-space) * 3);
   border-radius: 16px 16px 0 0;
   background: var(--color-background-highlight);
   box-shadow: 0 -1px 0 0 var(--color-background), 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
@@ -301,7 +309,7 @@ button {
     border-radius: 4px;
   }
 
-  & svg-icon {
+  & .svg-icon {
     width: 28px;
     height: 28px;
   }
@@ -402,7 +410,7 @@ button {
 
     & .name {
       margin-bottom: 0;
-      color: var(--color-github);
+      color: var(--color-white);
       font-weight: bold;
     }
 
@@ -491,6 +499,12 @@ button {
       --da-switch-height: 24px;
       --da-switch-slider-height: 16px;
     }
+  }
+}
+
+@media (--tablet) {
+  footer {
+    box-shadow: 0 -1px 0 0 #262626, 0 -8px 16px 0 rgba(0, 0, 0, 0.2);
   }
 }
 </style>

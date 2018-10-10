@@ -1,7 +1,7 @@
-import { apiUrl, pageSize } from './config';
+import { apiUrl, pageSize, redirectUrl } from './config';
 
 const redirectLink = post =>
-  `${apiUrl}/r/${post.id}`;
+  `${redirectUrl}/r/${post.id}`;
 
 const ratioToSize = (ratio) => {
   if (ratio > 1.5) {
@@ -41,6 +41,19 @@ export const fetchPublications = () =>
 export const fetchBookmarks = (latest, page, accessToken) =>
   fetch(
     `${apiUrl}/v1/posts/bookmarks?latest=${latest.toISOString()}&page=${page}&pageSize=${pageSize}`,
+    {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      credentials: 'include',
+    },
+  )
+    .then(response => response.json())
+    .then(posts => posts.map(mapPost));
+
+export const fetchToilet = (latest, page, accessToken) =>
+  fetch(
+    `${apiUrl}/v1/posts/toilet?latest=${latest.toISOString()}&page=${page}`,
     {
       headers: {
         authorization: `Bearer ${accessToken}`,

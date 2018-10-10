@@ -9,13 +9,16 @@
     "svg": "vsvg -s ./icons -t ./src/icons"
   },
   "dependencies": {
+    "gsap": "^2.0.2",
     "intersection-observer": "^0.5.0",
     "localforage": "^1.7.2",
     "mixpanel-browser": "^2.22.4",
     "register-service-worker": "^1.0.0",
     "vue": "^2.5.17",
+    "vue-masonry-css": "^1.0.3",
     "vue-router": "^3.0.1",
     "vue-svgicon": "^3.2.0",
+    "vue-visible": "^1.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -24,25 +27,17 @@
     "@vue/cli-plugin-pwa": "^3.0.4",
     "@vue/cli-service": "^3.0.4",
     "@vue/eslint-config-airbnb": "^3.0.4",
+    "postcss-custom-media": "^7.0.4",
     "postcss-extend": "^1.0.5",
-    "postcss-preset-env": "^6.0.7",
+    "postcss-nesting": "^7.0.0",
     "vue-template-compiler": "^2.5.17"
   },
   "postcss": {
     "plugins": {
       "autoprefixer": {},
       "postcss-extend": {},
-      "postcss-preset-env": {
-        "stage": 1,
-        "features": {
-          "nesting-rules": true,
-          "custom-media-queries": {
-            "extensions": {
-              "--mobile-m": "(min-width: 375px)"
-            }
-          }
-        }
-      }
+      "postcss-nesting": {},
+      "postcss-custom-media": {}
     }
   },
   "browserslist": [
