@@ -80,7 +80,7 @@ module.exports = {
           handler: 'networkFirst',
         },
         {
-          urlPattern: new RegExp('^/(toilet|login|oauth|notSupported).*'),
+          urlPattern: new RegExp('^/(home|toilet|login|oauth|notSupported).*'),
           method: 'GET',
           handler: 'networkFirst',
         },

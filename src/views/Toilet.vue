@@ -262,7 +262,7 @@ export default {
         threshold: 0.5,
         max: () => this.$refs.post.$el.clientHeight,
         execPostAnimation: () => {
-          this.$router.push('/');
+          this.$router.push('/home');
           return true;
         },
       },

@@ -10,6 +10,10 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      redirect: '/toilet',
+    },
+    {
+      path: '/home',
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
       children: [
