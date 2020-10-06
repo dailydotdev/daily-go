@@ -2,8 +2,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://app.dailynow.co',
-        // target: 'http://localhost:4000',
+        target: 'http://localhost:4000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '',
