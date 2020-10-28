@@ -11,8 +11,7 @@
     "parser": "babel-eslint"
   },
   "globals": {
-    "ga": true,
-    "mixpanel": true
+    "ga": true
   },
   "rules": {
     "no-param-reassign": [

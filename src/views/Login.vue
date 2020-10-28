@@ -52,7 +52,6 @@ export default {
   methods: {
     trackLogin(provider) {
       ga('send', 'event', 'Login', 'Initialized', provider);
-      mixpanel.track('Login Initialized', { provider });
     },
   },
 

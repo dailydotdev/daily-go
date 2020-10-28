@@ -23,8 +23,8 @@ const handleNewPage = (state, commit, suffix, posts) => {
   }
 };
 
-const fetchBookmarksFeed = (state, commit, accessToken) =>
-  fetchBookmarks(state.latest, state.page, accessToken)
+const fetchBookmarksFeed = (state, commit) =>
+  fetchBookmarks(state.latest, state.page)
     .then((posts) => {
       const postsWithBookmarked = posts.map(p => Object.assign({}, p, { bookmarked: true }));
       handleNewPage(state, commit, 'Bookmarks', postsWithBookmarked);
@@ -89,7 +89,7 @@ export default {
         .then(pubs => commit('setPublications', pubs));
     },
 
-    fetchNextPage({ commit, state, rootState, rootGetters }) {
+    fetchNextPage({ commit, state, rootGetters }) {
       if (state.loading || (state.page >= 5 && !state.showBookmarks)) {
         return false;
       }
@@ -102,7 +102,7 @@ export default {
       if (!rootGetters['user/isLoggedIn']) {
         // fetchAnonymousFeed(state, commit);
       } else if (state.showBookmarks) {
-        fetchBookmarksFeed(state, commit, rootState.user.profile.accessToken);
+        fetchBookmarksFeed(state, commit);
       } else {
         // fetchUserFeed(state, commit, rootState.user.profile.accessToken);
       }

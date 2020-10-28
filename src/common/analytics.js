@@ -1,4 +1,3 @@
-import 'mixpanel-browser/mixpanel-jslib-snippet.min';
 import '../common/rIC';
 import { fetchUserId } from './api';
 
@@ -23,22 +22,14 @@ ga('create', process.env.VUE_APP_GA, 'auto');
 
 const isPwa = window.location.search.indexOf('pwa=true') > -1;
 
-mixpanel.init(process.env.VUE_APP_MIXPANEL);
-mixpanel.register({
-  source: 'go',
-  pwa: isPwa,
-});
-
 export const trackPage = (page) => {
   const suffix = isPwa ? '?pwa=true' : '';
   ga('set', 'page', `/go/${page}${suffix}`);
   ga('send', 'pageview');
-  mixpanel.track(`Go ${page.replace(/^\w/, c => c.toUpperCase())}`);
 };
 
 export const updateId = (id) => {
   ga('set', 'userId', id);
-  mixpanel.identify(id);
 };
 
 export const init = (userId) => {

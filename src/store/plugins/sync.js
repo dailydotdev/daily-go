@@ -5,7 +5,7 @@ let syncing = false;
 
 const syncSettingsFromServer = (store, state) => {
   if (store.getters['user/isLoggedIn']) {
-    fetchSettings(state.user.profile.accessToken)
+    fetchSettings()
       .then((settings) => {
         syncing = true;
         if (settings.theme !== state.ui.theme) {
@@ -27,9 +27,9 @@ const plugin = (store) => {
       case 'feed/toggleBookmark': {
         const { id, bookmarked } = mutation.payload;
         if (bookmarked) {
-          addBookmarks([id], state.user.profile.accessToken);
+          addBookmarks([id]);
         } else {
-          removeBookmark(id, state.user.profile.accessToken);
+          removeBookmark(id);
         }
         break;
       }
@@ -40,7 +40,7 @@ const plugin = (store) => {
             theme: state.ui.theme,
             appInsaneMode: state.ui.insaneMode,
           };
-          updateSettings(settings, state.user.profile.accessToken);
+          updateSettings(settings);
         }
         break;
       default:

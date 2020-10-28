@@ -362,7 +362,7 @@ export default {
       }
 
       this.loading = true;
-      const newPosts = await fetchToilet(this.latest, this.currentPage, this.accessToken);
+      const newPosts = await fetchToilet(this.latest, this.currentPage);
       if (newPosts) {
         this.currentPage += 1;
       }

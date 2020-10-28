@@ -164,10 +164,8 @@ export default {
     openLink() {
       if (this.post.type === 'post') {
         ga('send', 'event', 'Post', 'Click', this.source);
-        mixpanel.track('Post Click', { source: this.source, toilet: true });
       } else {
         ga('send', 'event', 'Ad', 'Click', this.source);
-        mixpanel.track('Ad Click', { source: this.source, toilet: true });
       }
 
       const win = window.open(this.link, '_blank');
@@ -177,7 +175,6 @@ export default {
     onBookmark() {
       const bookmarked = !this.bookmarked;
       ga('send', 'event', 'Post', 'Bookmark', this.bookmarked ? 'Remove' : 'Add');
-      mixpanel.track('Post Bookmark', { source: this.source, toggle: bookmarked, toilet: true });
       this.toggleBookmark({ id: this.post.id, post: this.post, bookmarked });
       this.bookmarked = bookmarked;
     },

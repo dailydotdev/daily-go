@@ -38,70 +38,55 @@ export const fetchPublications = () =>
   fetch(`${apiUrl}/v1/publications`, { credentials: 'include' })
     .then(response => response.json());
 
-export const fetchBookmarks = (latest, page, accessToken) =>
+export const fetchBookmarks = (latest, page) =>
   fetch(
     `${apiUrl}/v1/posts/bookmarks?latest=${latest.toISOString()}&page=${page}&pageSize=${pageSize}`,
     {
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
       credentials: 'include',
     },
   )
     .then(response => response.json())
     .then(posts => posts.map(mapPost));
 
-export const fetchToilet = (latest, page, accessToken) =>
+export const fetchToilet = (latest, page) =>
   fetch(
     `${apiUrl}/v1/posts/toilet?latest=${latest.toISOString()}&page=${page}`,
     {
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
       credentials: 'include',
     },
   )
     .then(response => response.json())
     .then(posts => posts.map(mapPost));
 
-export const fetchSettings = accessToken =>
+export const fetchSettings = () =>
   fetch(`${apiUrl}/v1/settings`, {
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    },
     credentials: 'include',
   })
     .then(response => response.json());
 
-export const updateSettings = (settings, accessToken) =>
+export const updateSettings = settings =>
   fetch(`${apiUrl}/v1/settings`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(settings),
     credentials: 'include',
   });
 
-export const addBookmarks = (bookmarks, accessToken) =>
+export const addBookmarks = bookmarks =>
   fetch(`${apiUrl}/v1/posts/bookmarks`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(bookmarks),
     credentials: 'include',
   });
 
-export const removeBookmark = (postId, accessToken) =>
+export const removeBookmark = postId =>
   fetch(`${apiUrl}/v1/posts/${postId}/bookmark`, {
     method: 'DELETE',
-    headers: {
-      'content-type': 'application/json',
-      authorization: `Bearer ${accessToken}`,
-    },
     credentials: 'include',
   });
 

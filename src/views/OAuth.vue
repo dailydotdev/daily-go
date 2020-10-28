@@ -19,7 +19,6 @@ export default {
       return exchangeCode(params.provider, query)
         .then((profile) => {
           ga('send', 'event', 'Login', 'Done', params.provider);
-          mixpanel.track('Login Done', { provider: params.provider, newUser: profile.newUser });
 
           updateId(profile.id);
           vm.$store.commit('user/updateProfile', profile);
@@ -31,7 +30,6 @@ export default {
         })
         .catch(() => {
           ga('send', 'event', 'Login', 'Failed', params.provider);
-          mixpanel.track('Login Failed', { provider: params.provider });
 
           vm.$router.replace('/login');
         });
