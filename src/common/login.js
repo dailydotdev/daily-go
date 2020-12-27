@@ -1,10 +1,7 @@
 import { apiUrl } from './config';
 
-export const getLoginLink = (provider, redirectTo) => {
-  const suffix = redirectTo ? `?to=${redirectTo}` : '';
-  const redirectUri = `${window.location.origin}/oauth/${provider}/callback${suffix}`;
-  return `${apiUrl}/v1/auth/${provider}/authorize?redirect_uri=${encodeURI(redirectUri)}`;
-};
+export const getLoginLink = (provider, redirectTo) =>
+  `${apiUrl}/v1/auth/authorize?provider=${provider}&redirect_uri=${encodeURI(window.location.origin + redirectTo)}&skip_authenticate=true`;
 
 export const exchangeCode = (provider, query) =>
   fetch(`${apiUrl}/v1/auth/${provider}/authenticate`, {

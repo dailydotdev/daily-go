@@ -1,5 +1,5 @@
 import '../common/rIC';
-import { fetchUserId } from './api';
+import { fetchUser } from './api';
 
 /* eslint-disable */
 (function (i, s, o, g, r, a, m) {
@@ -33,6 +33,6 @@ export const updateId = (id) => {
 };
 
 export const init = (userId) => {
-  const promise = userId ? Promise.resolve(userId) : fetchUserId();
+  const promise = userId ? Promise.resolve(userId) : fetchUser().then(user => user.id);
   promise.then(updateId);
 };

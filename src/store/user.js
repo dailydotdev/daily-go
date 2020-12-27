@@ -1,4 +1,4 @@
-import { refreshToken, logout } from '../common/api';
+import { logout, fetchUser } from '../common/api';
 import { deleteState } from '../common/storage';
 
 const initialState = () => ({ profile: null });
@@ -27,10 +27,17 @@ export default {
     },
   },
   actions: {
-    refreshToken({ state, commit }) {
-      return refreshToken(state.profile.refreshToken)
-        .then(accessToken =>
-          commit('refreshToken', { accessToken: accessToken.token, expiresIn: accessToken.expiresIn }));
+    refreshToken({ commit }) {
+      return fetchUser()
+        .then((user) => {
+          if ('providers' in user) {
+            const userClone = Object.assign({}, user);
+            userClone.accessToken = undefined;
+            commit('updateProfile', userClone);
+          } else {
+            commit('updateProfile', null);
+          }
+        });
     },
     logout({ commit }) {
       commit('reset');
@@ -45,15 +52,6 @@ export default {
   getters: {
     isLoggedIn(state) {
       return !!state.profile && !!state.profile.id;
-    },
-
-    isTokenAboutToExpire(state) {
-      if (state.profile && state.profile.expiresIn) {
-        const dt = new Date(state.profile.expiresIn) - new Date();
-        return dt <= 60 * 60 * 1000;
-      }
-
-      return false;
     },
   },
 };
