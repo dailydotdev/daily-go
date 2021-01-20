@@ -9,7 +9,7 @@
     "svg": "vsvg -s ./icons -t ./src/icons"
   },
   "dependencies": {
-    "gsap": "^2.0.2",
+    "gsap": "^3.6.0",
     "intersection-observer": "^0.5.0",
     "localforage": "^1.7.2",
     "register-service-worker": "^1.0.0",
