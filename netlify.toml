@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/*"
+  to = "https://app.daily.dev"
+  status = 301
+  force = true
