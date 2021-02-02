@@ -1,3 +1,4 @@
+/ https://app.daily.dev 301!
 /* https://app.daily.dev 301!
 /api/*  https://api.daily.dev/:splat  200
 https://go.dailynow.co/* https://go.daily.dev/:splat 301!
